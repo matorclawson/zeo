@@ -2,7 +2,7 @@
 
 **Updated:** 2026-11-18 · **Status:** Implementation in progress; no qualified distribution release.
 
-This register describes public product behavior in neutral terms. The original 312 identifiers remain stable; section 20 adds the common environment-profile requirements. IDs are never reused or renumbered. Superseded behavior must retain its ID and a replacement reference.
+This register describes public product behavior in neutral terms. The original 312 identifiers remain stable; section 20 adds common environment-profile requirements, section 21 platform operation and section 22 the one-seat installation milestone. IDs are never reused or renumbered. Superseded behavior must retain its ID and a replacement reference.
 
 Each row separates implementation from verification. `Not started`, `In progress`, `Implemented`, `Verified` and `Blocked` have distinct meanings; only repeatable behavioral evidence qualifies a product requirement as Verified. Unknown limitations and dependencies remain unresolved. Distribution maintainers are accountable for the whole product; component maintainers retain their component responsibilities.
 
@@ -449,3 +449,33 @@ Section 20 clarifies the seat-environment policy used by sections 11–12. A sea
 | ZEO-20-23 | Consume qualified published environment releases and require adoption evidence before moving gates or production deployment. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 | ZEO-20-24 | Measure host capacity before choosing per-seat guest allocations or any grouped topology; disclose the resulting isolation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
+
+## 21. Actor-independent unified platform
+
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+|---|---|---|---|---|---|---|---|
+| ZEO-21-01 | Assemble the platform machinery into one versioned Linux release and one installation flow. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-02 | Run platform services under systemd with explicit health checks, restart policy and state custody. | Distribution maintainers | In progress | Candidate guest session service packaging; commit pending | Linux gate and real service activation pending | Renderer only; no platform installation or service qualification | Owner artifacts, allocated identities and adopted environment profile |
+| ZEO-21-03 | Keep platform service availability independent of builder sessions, panes and consumer actors. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-04 | Run consumer seats on pinned released artifacts outside builder working trees. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-05 | Support platform builders and release consumers on separate physical hosts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-06 | Retain Runtime authority for desired organizations, seats and placement. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-07 | Use Pomar for observed environments, heartbeats and reconciliation; report unexpected state without silently changing placement. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-08 | Expose the seat directory and authenticated real terminal attachment through App. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-09 | Execute seats inside Pomar environments with explicit supported isolation and identity mappings. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-10 | Keep observation, App access and owner notification outside the pilot VM whose failure is tested. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-11 | Reuse owner-adopted bootstrap, configuration, credential and lifecycle interfaces in distribution installation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-21-12 | Record each service artifact, runtime location, supervisor, state, dependencies, actor dependence, Linux gap and responsible owner; assign unknowns to owners. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+
+## 22. Single-host installation with one working seat
+
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+|---|---|---|---|---|---|---|---|
+| ZEO-22-01 | Install an exact pinned component set on a fresh supported Linux host through one entry point. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-02 | Demonstrate that installed systemd platform services continue when the builder session ends. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-03 | Create one organization and seat through the intended Runtime and Pomar ownership boundary. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-04 | List the seat in App and use a real terminal whose resize reaches the running guest session. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-05 | Detach and reconnect to the same immutable session, preserving it across App and host-agent restarts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-06 | Complete a bounded task with a real model and independently inspect its deliverable and budget evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-07 | Stop the pilot seat VM and demonstrate App failure visibility and actual owner alert delivery within sixty seconds. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-22-08 | Bind every pilot demonstration to the installed release, component and environment versions and original receipts; keep broader acceptance obligations open. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
