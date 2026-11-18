@@ -29,7 +29,7 @@ Host-specific credential access, service supervision, signing, filesystem defaul
 | Execution model | CLI and coordinator with Unix-domain service APIs. Installed supervision is not established by the source inventory. |
 | State | Execution request and event files with explicit directory/file permissions and transition checks. Complete migration and coordinated recovery scope remain unknown. |
 | Interfaces | Execution/domain interfaces, local service API, messaging dependency and a Pomar control client with signed-result checks. |
-| Deployment | A separately observed installed version differed from the inspected source. No installed revision or service-state claim is transferred to this candidate. |
+| Deployment | Owner metadata now identifies a supervised non-Linux daemon and a separate Linux CLI artifact. That CLI is a tool build, not a qualified Runtime daemon or Linux installer. Installed health, migration and recovery remain unqualified. |
 | Dependencies | Messenger integration, environment execution facilities, provider adapters and the declared module graph. Complete service contracts remain under inspection. |
 | Publication blockers | Inaccessible source/dependencies and unresolved publication review. Complete rights and history checks are pending. |
 | Release blockers | Linux service/credential paths, compatible component release pins, real integration, independent-organization isolation and lifecycle acceptance. |
@@ -83,7 +83,7 @@ Host-specific credential access, service supervision, signing, filesystem defaul
 | Execution model | Long-running service with explicit state/credential-reference/runtime-socket arguments and a registration/status pump. Registration is distinct from due-time dispatch. |
 | State | Owned private state root, exclusive writer fence and synchronized state replacement; encrypted component-backup implementation. Deployed custody, migrations and restore proof remain missing. |
 | Interfaces | Task/productivity/personal routes and injected authority/reminder adapters. Missing adapters remain unavailable; a private socket alone does not grant owner authority. |
-| Deployment | No supported installed-service or adoption receipt is held; no installation or identity binding was performed by this inventory. |
+| Deployment | Component and runtime owners do not hold an adopted installation tuple. One daemon and two one-shot tools are source-defined; the direct journal CLI needs an exclusive writer window even for export. No source unit or archive establishes adoption. |
 | Dependencies | Runtime reminder/verification interfaces, Connect, Messenger, Scheduler and the release build toolchain. Proposed shared-feed contracts are not assumed implemented. |
 | Publication blockers | No licence/copying filename found; source/publication scan, public artifacts and private-access-free build remain unresolved. |
 | Release blockers | Current candidate gate, real authority/wire integration, maintained Linux lifecycle packaging, compatible contracts and recovery acceptance. |
@@ -93,7 +93,7 @@ Host-specific credential access, service supervision, signing, filesystem defaul
 
 | Field | Finding |
 |---|---|
-| Repository and revision | Inspected `19fc44892ec06cfb1aacd7928a19a19efbf20737`, tree `b73d7a8b9a1fbe75d8c89b897576fd1b832bc140`, matching the component owner-reported current application tree. Branch ancestry was not independently established. |
+| Repository and revision | Latest owner-pinned candidate `e24013c61b1eb2fc3a5f6a8a62d13e29d1faf8bc`, tree `a727ecebcd556e3c827c2ed00d936391074137d0`. All 15 supplied file size/SHA256/Git-blob pins independently match source objects and the previously inspected selected files at `19fc44892ec06cfb1aacd7928a19a19efbf20737`. Main integration and public release are not inferred. |
 | Current owner | Application maintainers own source/product behavior; runtime/operations own installed custody and ingress, Connect owns delegated identity, and upstream components own feeds. |
 | Purpose | Operator web workspace, sessions, organizational feeds and durable workflow/outbox state. Proposed project-planning integrations remain unadopted. |
 | Implementation | TypeScript, Node, Next, Fastify and React. Retained Linux web-gate receipt records Node 24.22.1/npm 11.19.1. Lock digest `930f77aa8653d42d2f5601bf595a6888a8ec1bf0a74a6bf431670297b168077b` matches inspected bytes. |
@@ -101,11 +101,11 @@ Host-specific credential access, service supervision, signing, filesystem defaul
 | Execution model | Loopback API and web frontend, plus a bounded synchronous feed-publisher CLI. Fixed local origins/ports need multi-instance configuration and tests. |
 | State | Shared session/workflow SQLite database with WAL/FULL synchronization and file-custody checks. Consistent backup/restore and a maintained migration contract remain open. |
 | Interfaces | Versioned configuration, Connect-backed sessions, feed/HTTP contracts and compare-and-swap publisher inputs. Schema presence is not an enrollment grant or live producer route. |
-| Deployment | No complete current installed-service/publisher receipt is held. The retained test receipt explicitly does not claim deployment. |
+| Deployment | Component and runtime owners hold no complete current installed-service/publisher tuple; this does not prove global absence. No adopted browser-to-Pomar terminal gateway or qualified install bundle is held. Component web tests do not qualify real terminal attachment. |
 | Dependencies | Exact application packages and lockfile; Node SQLite, Connect, producer feeds and owner-managed supervision/ingress. Browser packages are gate requirements, not automatically runtime payload. |
 | Publication blockers | MIT licence file observed; package remains private-marked. That observation does not clear history, third-party rights, assets, separate desktop code or publication. |
 | Release blockers | External install/onboarding, independent identities, portable ports/service UIDs, producer bindings, migration/restore and ARM64 qualification. |
-| Evidence | Retained log digest `bf304602f0eec575f14c36be0312bb2bf67bbc6ef6647e38b80cf9ec8a9942c9` matches its receipt: 158 unit tests, service/SSR checks, 43 browser tests, none skipped. Source binding is runner-attested; no rerun or full-product acceptance is claimed. |
+| Evidence | All 15 latest owner source pins match inspected Git objects. The owner reports a Linux web gate at `e24013c6` with log digest `11191f16635449f0c86afa12172df03de7395a421a9a9f623eba16596737260c`: 158 unit tests, service/SSR and 43 browser tests. The previously retained digest `bf304602f0eec575f14c36be0312bb2bf67bbc6ef6647e38b80cf9ec8a9942c9` belongs to the earlier candidate. No App rerun, installed receipt or complete-product acceptance is claimed here. |
 
 ## Pomar
 

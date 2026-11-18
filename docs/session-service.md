@@ -1,6 +1,6 @@
 # Guest session service packaging
 
-Updated: 2026-11-18. Status: candidate source; not compiled, tested or activated.
+Updated: 2026-11-18. Status: candidate packaging source compiled and regression-tested by the Linux make verify gate at ddd4666fc895244d87770ab629778856bbb0201e. Actual systemd unit verification, activation and Pomar session integration remain untested.
 
 The one-seat installation needs the session keeper to run inside the seat's Linux environment, independently of App and the host agent. The existing Pomar interface is `pomar session serve -root DIR` in the foreground. `zeo-service` renders its systemd system unit. It does not implement a second session manager or installer.
 
