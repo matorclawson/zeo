@@ -14,6 +14,13 @@ Observed source edges (not a validated release graph):
 - Messenger → Tailscale: `cmd/zmsgd/main.go:151` authenticates callers through node lookup; the Linux unit depends on `tailscaled.service`.
 - Pomar manager → signed Swift host → Apple Containerization: `internal/manager/manager.go:96`, `host/Package.swift:17`; host-side adapter work must stay separate from the Linux product.
 
+Additional edges verified or explicitly attributed during relay reconciliation:
+
+- Agenda → Runtime: `cmd/zeoagenda/main.go:31–32` installs RuntimeReminders for an explicitly supplied socket. Without adapters several actions remain unavailable (`internal/app/server.go:133–150`). Live wire/identity binding remains unproven.
+- Agenda → Scheduler/Connect/Messenger: owner packet assigns host timers, identity/actions and message delivery to those components. These are owner-declared integration dependencies, pending independent endpoint/contract inspection; Scheduler must be added to the remaining component inventory.
+- App → Connect and producer feeds: `server/main.ts:33–44` wires Connect-backed sessions and published feeds. Current production publisher/identity routes remain unbound per packet; configuration schema alone is not an access grant.
+- App web backend → Next frontend: loopback API origin and rewrites (`src/shared/api-origin.ts:1–5`; `next.config.ts:18–22`); multi-instance port/origin support is unresolved.
+
 The complete graph, contract versions, Linux service boundaries, and all other component edges remain UNKNOWN. Do not create replacement schedulers, credential stores or environment managers on this preliminary evidence.
 
 ## Hardcoded operational references
@@ -27,6 +34,8 @@ Initial findings below refer to tracked source at the revisions in each entry. P
 | Messenger | Fixed Mac volume paths for mailbox, client, logs and receipts; fixed tailnet listen address; Tailscale app path | `cmd/zmsgd/main.go:59–90`; `bin/zmsg:126` | Installer must override all relevant paths and host settings per independent organization. |
 | Messenger | launchctl install/upgrade and wake operations | `deploy/install-v5.sh:127`; `bin/zmsg:2311,3484` | Linux service definition alone does not prove wake/upgrade parity. |
 | Messenger | Fixed internal service domain and bridge/Architect seat mapping in Linux unit | `deploy/service/zmsgd.service:23` | Must be configurable for external organizations and tested with two instances. |
+| App | Fixed API origin/port, frontend port and numeric service-UID exclusions | `app/TodosWeb/src/shared/api-origin.ts:1–5`; `package.json` start; `server/config.ts:59–63` | Same-host multi-instance port and identity allocation require design and tests; no configuration-only portability claim. |
+| App | Root gate hardcodes host/user admission; native plist packaging remains | `Makefile:496–498`; exact tree plist enumeration | Gate venue must remain owner-admitted; source gate success is not a portable installer. |
 | Pomar | macOS 26 host package, Apple Containerization dependency and codesign gate | `host/Package.swift:9,17`; `Makefile:18,82–86` | Mac host adapter is implemented in inspected worktree; Linux VPS backend remains UNKNOWN. |
 
 Personal usernames, account IDs, organization IDs and additional domains elsewhere in these trees remain UNKNOWN pending a full tracked-content and history scan. No licence or secret review clearance is implied.
@@ -89,19 +98,19 @@ Personal usernames, account IDs, organization IDs and additional domains elsewhe
 
 | Field | Finding |
 |---|---|
-| Repository and revision | UNKNOWN |
-| Current owner | UNKNOWN |
-| Purpose | UNKNOWN |
-| Implementation | UNKNOWN |
-| Platform assumptions | UNKNOWN |
-| Execution model | UNKNOWN |
-| State | UNKNOWN |
-| Interfaces | UNKNOWN |
-| Deployment | UNKNOWN |
-| Dependencies | UNKNOWN |
-| Publication blockers | UNKNOWN |
-| Release blockers | UNKNOWN |
-| Evidence | UNKNOWN |
+| Repository and revision | `rodriveracom/zeoagenda` candidate `c2aabfe85c3027213a82de1811e41630041053f4`, tree `65f44ab71ef3ac8a663fa29118493fb243e6b7a3`; pinned WIP, not local main. Owner packet at records commit `ca8ebe5f00e70c4bc0730cb63c1b229fcb842604`; packet SHA256 and all 15 source file SHA256/blob IDs independently match local objects (A1). |
+| Current owner | zeoagenda-maintainer identifies itself as component owner in the pinned packet. Packet assigns host timers to Scheduler and actions/identity to Runtime/Connect; their current production bindings remain UNKNOWN. Distribution integration: zeo-maintainer. |
+| Purpose | Durable temporal/task intent and personal workspace APIs. Source wires task/productivity/personal handlers (`internal/app/server.go:133–170`) and a reminder registration/status pump (`:73–111`). Capacity planning is described by owner as proposed, not implemented or adopted. |
+| Implementation | Go 1.27.0; `go.mod:1–3` declares no external modules. Three command entrypoints: `cmd/zeoagenda`, `cmd/agenda`, `cmd/agenda-commitments`, with build commands recorded in packet. `make verify` is the requested gate; no candidate gate executed or passing receipt supplied in this packet. |
+| Platform assumptions | Unix-domain sockets and kernel ownership/locking assumptions confirmed (`internal/app/server.go:46,65`; `internal/agenda/store.go:94–123`). No service/timer/plist files in pinned tree. macOS-only runtime dependency not established from inspected paths; Linux behavior and ARM64/AMD64 qualification remain unverified. |
+| Execution model | Long-running Go daemon via `ServeWithAdapters`; signal handling and explicit state/credential/runtime-socket arguments (`cmd/zeoagenda/main.go:15–37`). Reminder registration pump is present; do not infer due-time host scheduling from it. Owner assigns host timers to Scheduler. |
+| State | Absolute state root, mode 0700, effective-UID ownership, exclusive `writer.lock` mode 0600 and Flock (`internal/agenda/store.go:94–123`); synchronized atomic state replacement (`:254–260`). AES-GCM encrypted component backup implementation (`internal/agenda/backup.go:69–77,185–258`). Actual deployed state ownership, supported migrations and clean-host restore proof UNKNOWN. |
+| Interfaces | Unix `api.sock`, task/productivity/personal dispatch (`internal/app/server.go:46,65,152–169`); injected adapters and explicit Runtime socket. Missing Runtime/Budget/Acceptor adapters become Unavailable; default authorization refuses owner data (`:133–150`). Credential registry and CLI token-file interfaces are specified in packet; production verifier/wire proof absent. |
+| Deployment | Owner reports no held supported installation/service/adoption receipt. Pinned tree has no service/timer/plist packaging. No daemon started, protected identity bound or live deployment inspected by maintainer. |
+| Dependencies | Standard library runtime; compatible Go/Make and race/C toolchain for gate per packet. Runtime reminder gateway, Connect/Runtime verifiers, Messenger and Scheduler are integration dependencies. Versioned zeocontracts feed contracts are reported proposed; not treated as available. |
+| Publication blockers | Private module namespace in go.mod. No LICENSE/COPYING files found by exact-tree filename enumeration. Rights/licence choice, complete secret/history review, public artifacts and private-access-free build remain unresolved. |
+| Release blockers | Exact candidate production gate and both readers; real Runtime/Connect authorization and reminder wire tests; Linux service/lifecycle packaging; migration and backup/restore consumer proof; versioned contracts and publication clearance. No independent-organization acceptance evidence. |
+| Evidence | A1–A4 below. Packet digest, source tree and 15 file pins verified; selected implementation read at exact candidate. Source metadata findings only; no build, test, service or release demonstration run. |
 
 ## Controlling
 
@@ -143,19 +152,19 @@ Personal usernames, account IDs, organization IDs and additional domains elsewhe
 
 | Field | Finding |
 |---|---|
-| Repository and revision | UNKNOWN |
-| Current owner | UNKNOWN |
-| Purpose | UNKNOWN |
-| Implementation | UNKNOWN |
-| Platform assumptions | UNKNOWN |
-| Execution model | UNKNOWN |
-| State | UNKNOWN |
-| Interfaces | UNKNOWN |
-| Deployment | UNKNOWN |
-| Dependencies | UNKNOWN |
-| Publication blockers | UNKNOWN |
-| Release blockers | UNKNOWN |
-| Evidence | UNKNOWN |
+| Repository and revision | Owner reports `rodriveracom/zeoapp` main `a3142585e42a73ca0efc2eba397f717301915048`, tree `b73d7a8b9a1fbe75d8c89b897576fd1b832bc140`. Main commit object absent locally. Inspected gate commit `19fc44892ec06cfb1aacd7928a19a19efbf20737` has exactly that tree; source-byte equivalence confirmed, main ancestry/publication not independently confirmed. Packet at records commit `7076b73a9b9c6698d62755bc1a88775ce5475edd` (W1). |
+| Current owner | zeoapp retains product/source authority per pinned owner packet; Ops/Runtime retain host installation/supervision and Connect retains identity/delegation. No installation or custody authority transferred by this inventory. |
+| Purpose | Operator web workspace with sessions, feeds and workflow/outbox state. `app/TodosWeb/server/main.ts:31–45` constructs Sessions, Feeds and WorkflowStore into the API. Owner reports new planning/project export and external Projects return unadopted; they are not current distribution features. |
+| Implementation | TypeScript/Node, Next, Fastify and React. Inspected scripts regenerate validators, build Next and write build stamp (`app/TodosWeb/package.json`). Historical gate receipt records Node 24.22.1/npm 11.19.1. Lock SHA256 `930f77aa8653d42d2f5601bf595a6888a8ec1bf0a74a6bf431670297b168077b` independently matches. Root tree also retains native code; Linux web scope is narrower than root verify. |
+| Platform assumptions | POSIX UID/mode checks and built-in `node:sqlite`. Historical production-03 TypeScript gate evidence exists, with limits below; no Linux ARM64 acceptance. Root native code and plist packaging remain Mac-specific per packet and exact-tree enumeration. Separate desktop source not independently inspected. |
+| Execution model | Two long-running loopback processes: Fastify API (`server/main.ts:54`) and Next (`package.json` start script, port 4173). API origin is fixed to `http://127.0.0.1:4380` (`src/shared/api-origin.ts:1–5`). Publisher CLI is bounded synchronous input processing (`server/publish-cli.ts:1–17`), not a scheduler. |
+| State | `private_store/web-sessions.sqlite3`; custody checks for database/WAL/SHM and shared Sessions/WorkflowStore database (`server/main.ts:16–44`). Sessions enables WAL, FULL sync and busy timeout (`server/sessions.ts:45`). Consistent DB/WAL backup, clean-host restore and coordinated migration proof remain pending; constructor DDL is present. |
+| Interfaces | Config schema `zeoapp.typescript-service/v1`; dedicated service UID and ordinary-seat exclusions (`server/config.ts:14–22,59–65`); feed-backed API and loopback rewrites. CLI publisher accepts named profiles, expected digest and stdin JSON limited to 2 MiB (`server/publish-cli.ts:1–17`). Packet identifies Connect browser-delegation-v1 and versioned HTTP/feed contracts; complete live producer and enrollment route not verified. |
+| Deployment | Packet reports no App-held original installed TypeScript/live-service receipt and a frozen earlier release chain. No live service or installed source revision independently observed. Source gate receipt explicitly records deployment=false. Supervisor and HTTPS ingress remain external responsibilities. |
+| Dependencies | Exact package/lock pins include Next 16.4.6, Fastify 5.12.8, React 19.3.1, TypeScript 7.0.2 and Playwright 1.64.1; Node built-in SQLite. Connect and real upstream feed publishers are external dependencies. Browser/OS prerequisites belong to test qualification; complete runtime artifact dependencies remain to be established. |
+| Publication blockers | MIT LICENSE observed at inspected tree; package.json private=true. Remote privacy is owner-reported, not freshly queried. Whole-tree/history secrets, third-party assets/licences and private dependencies still need review. Root App licence observation does not establish separate desktop rights or publication clearance. |
+| Release blockers | Clean external install and independent-org onboarding; port/origin/service-UID portability; installed publisher and producer bindings; consistent backup/restore and migration; ARM64 tests; retained native separation; public/private dependency clearance. No broad release acceptance is supplied by the narrow web gate. |
+| Evidence | W1–W5 below. Original log SHA256/size/line count match packet, receipt binds gate commit and records exit 0, 158 unit tests, service/SSR PASS, 43 browser tests, 0 skipped. Source-head binding is runner-attested, not a raw-log banner. No rerun here; root/native gate NOT_RUN under recorded scope; no live Connect, attended device, deployment or external-org proof. |
 
 ## Pomar
 
@@ -267,11 +276,20 @@ All observations dated 2026-11-17. Revisions above are local source observations
 | P3 | Pomar recovery `internal/manager/manager.go:33–100`; `internal/manager/server.go:40–98,124–250` | Paths, config and socket/HTTP source. |
 | P4 | Pomar recovery `host/Sources/PomarHostCore/Helper.swift:8–107`; `host/Sources/PomarHostCore/AgentEnvironment.swift:1–55` | Attempt and retained environment input/resource fields; no VM behavior proof. |
 | P5 | Pomar recovery `Makefile:18,73–91` | Full gate includes macOS Swift/signing stages; never run here. |
+| A1 | Records `org-zeroemployeeorg@ca8ebe5f00e70c4bc0730cb63c1b229fcb842604:projects/zeoagenda/evidence/zeoagenda/distribution-inventory-20261117/AGENDA-COMPONENT-INVENTORY-v1.json` | Packet SHA256 `df893e411ee296fad4fefabb1351ca5489814bf13a9ef4811948a6b92eca80e9` matches relay; candidate tree and all 15 SHA256/blob pins match local Git objects. |
+| A2 | Agenda candidate `go.mod:1–3`; `cmd/zeoagenda/main.go:15–37`; `internal/app/server.go:46–111,133–170` | Toolchain, daemon, socket, pump, routing and missing-adapter defaults; source only. |
+| A3 | Agenda candidate `internal/agenda/store.go:94–123,254–260`; `internal/agenda/backup.go:69–77,185–258` | Private state, fencing and encrypted backup source; no recovery acceptance. |
+| A4 | Agenda candidate `git ls-tree -r --name-only` | No LICENSE/COPYING or service/timer/plist filename present. Packet's no-licence/no-service finding confirmed narrowly by names, not a rights audit. |
+| W1 | Records `matorclawson/org-zeroemployeeorg@7076b73a9b9c6698d62755bc1a88775ce5475edd:projects/zeoapp/evidence/distribution-inventory-20261117/APP-COMPONENT-INVENTORY.md` | Committed packet read; SHA256 `8dbf8aae5a5f2e76c435f3a3910548eaf10f726b39aebda5b7665e7f892e3b05`. App gate commit tree matches packet main tree; main commit itself unavailable locally. |
+| W2 | App gate commit `app/TodosWeb/package.json`, `package-lock.json`; `Makefile:496–500`; `LICENSE` | Scripts, exact dependencies, matching lock digest, narrow gate admission and MIT file. No execution here. |
+| W3 | App gate commit `app/TodosWeb/server/main.ts:16–54`; `server/sessions.ts:45`; `server/config.ts:14–22,59–65`; `server/publish-cli.ts:1–17` | State, service UID checks, API and publisher inputs. Paths after the first are relative to app/TodosWeb. |
+| W4 | App gate commit `app/TodosWeb/src/shared/api-origin.ts:1–5`; `app/TodosWeb/next.config.ts:1–22` | Fixed origin and loopback rewrites; actual external access not tested. |
+| W5 | Owner evidence `pr169-gate-package-20261117/PASS-ORIGINAL.log`, `PASS-RECEIPT.json` | Log SHA256 `bf304602f0eec575f14c36be0312bb2bf67bbc6ef6647e38b80cf9ec8a9942c9`, 24,169 bytes, 315 lines; receipt SHA256 `e753cd6a7b586a62e165dee0638c6830c6fb656b9927ff116556232f058a281e`. Historical narrow gate integrity, not a new gate or deployment. |
 
 ## Open work and blockers
 
 - Confirm current component owners and map these findings into permanent tracked implementation work; confirm the ID mechanism with zeo-ledger after mailbox registration.
 - Inspect actual installed services and deployment configurations through the authorized route. `zeoconnect` is not on this session's PATH; no authenticated production gate route has been established in this first cut. production-03/04 are the SOW's gate venues, not yet verified platform support.
-- Inspect Architect, Agenda, Controlling, Connect, App/backend, credentials, Recorder/artifacts and shared libraries; expand the complete repository destination map.
+- Agenda and App packets are reconciled above. Inspect their actual deployments and integration contracts; inspect Architect, Controlling, Connect, credentials, Recorder/artifacts, shared libraries and newly identified Scheduler; expand the complete repository destination map. Separate desktop source at owner-reported `b2a3a2a0684c51b5f0b051d6da41792420497b5c` is unavailable locally and remains an owner-only report, not verified Linux capability.
 - Complete hardcoded-reference and publication scans, including history, private modules, licences and assets. Initial source findings are not publication clearance.
 - Establish coordinated release versions, measured resources and all 14 release demonstrations. No product requirement is Verified from this inventory.
