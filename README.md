@@ -1,13 +1,13 @@
 # ZEO
 
-**Updated:** 2026-11-17 · **Status:** Distribution bootstrap · **Doctrine:** CLAUDE.md Rev 18 body.
+**Updated:** 2026-11-18 · **Status:** Early distribution implementation; release qualification pending.
 
-ZEO is being assembled as an open-source distribution for persistent agent organizations, including ML research teams, small frontier research labs and neolabs. The goal is an installable system for independent organizations with explicit budgets, permissions, human oversight and inspectable research evidence.
+ZEO is being assembled as an open-source platform for persistent agent organizations, including ML research teams and small research laboratories. It aims to let users create independent organizations, connect models, set budgets and permissions, and inspect the results of coordinated work.
 
-Available here today: the [requirements register](REQUIREMENTS.md) and an [inventory in progress](INVENTORY.md). This repository does not yet provide an installer, release artifacts, a working quickstart or a verified supported configuration.
+Available today: the [product requirements](REQUIREMENTS.md) and [component inventory](INVENTORY.md). An integrated installer and qualified distribution release are not available yet. Existing component capabilities do not establish that the complete platform works.
 
-Experimental: integration and platform investigation of existing components. Their presence in an inventory does not establish a working ZEO release.
+The installation target is one entry point for the complete Linux product, using compatible prebuilt component artifacts. Pomar supplies versioned execution environments; the distribution supplies the application platform inside them. Releases, environment profiles, organization settings and experiment configurations remain separately versioned.
 
-Planned: one installation entry point for the complete Linux system without Docker as a prerequisite; coordinated component releases; onboarding; organization and seat isolation; lifecycle and recovery tools; a Pomar-backed Mac-hosted Linux route; and reproducible research workflows. ARM64 and AMD64 are design targets, with support claims dependent on release tests.
+Planned capabilities include onboarding, coordinated service operation, organization and seat isolation, upgrade and recovery, and reproducible research workflows. ARM64 and AMD64 support will be claimed only after release acceptance on each qualified backend. Docker is not a prerequisite for the intended standard path.
 
-Implementation and verification are tracked separately. No release acceptance demonstration has passed in this repository. Public contribution, security reporting, licensing and release policies remain to be established; do not provide secrets or private operational data in contributions.
+Implementation and verification are tracked separately. Public quickstart, contribution, security-reporting, licensing and release policies remain incomplete. Contributions must exclude credentials and private operational state.

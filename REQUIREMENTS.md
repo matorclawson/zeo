@@ -1,426 +1,451 @@
-# Requirements register
+# Product requirements
 
-**Created:** 2026-11-17 · **Last-updated:** 2026-11-17 · **Status:** Initial baseline · **Doctrine:** CLAUDE.md Rev 18 body (header still says Rev 17).
+**Updated:** 2026-11-18 · **Status:** Implementation in progress; no qualified distribution release.
 
-Authority: operator mandate `MANDATE-zeo-distribution-2026-11-17.md`, received 2026-11-17, and `zeo-maintainer-SOW-01-zeo-distribution-charter.md`, revision a. The mandate wins over summaries here. Private charter location: `org-architect/projects/zeo/sow/zeo-maintainer/`.
+This register describes public product behavior in neutral terms. The original 312 identifiers remain stable; section 20 adds the common environment-profile requirements. IDs are never reused or renumbered. Superseded behavior must retain its ID and a replacement reference.
 
-IDs are permanent `ZEO-<mandate section>-<ordinal>` per SOW section 3. Never renumber or reuse them; append new IDs and retain superseded rows with a mapping. Confirmation with zeo-ledger is pending mailbox registration; any existing identifier mechanism must be mapped, without losing these IDs.
+Each row separates implementation from verification. `Not started`, `In progress`, `Implemented`, `Verified` and `Blocked` have distinct meanings; only repeatable behavioral evidence qualifies a product requirement as Verified. Unknown limitations and dependencies remain unresolved. Distribution maintainers are accountable for the whole product; component maintainers retain their component responsibilities.
 
-Each paragraph, list item and decision-table row is retained in source order, including constraints and qualifying context. Lead-in rows apply to the following items. This deliberately includes contextual statements to avoid losing requirements. Separate implementation and verification fields prevent source inspection or a merge from becoming a product acceptance claim.
+Section 20 clarifies the seat-environment policy used by sections 11–12. A seat instance does not, by itself, prove VM isolation: capacity, custody and actual boundaries must be measured and reported.
 
-Accountable owner for every row is zeo-maintainer; component delivery owners remain to be confirmed in the inventory. `—` means no implementation revision or verification evidence recorded. UNKNOWN dependencies and limitations are unresolved, not an assertion that none exist. Allowed states: Not started / In progress / Implemented / Verified / Blocked. Verified requires reproducible behavioral evidence. All rows start Not started as required by SOW section 8.
+## 0. Distribution governance
 
-Section 00 assigns IDs to the unnumbered preamble requirements. Sections 01–19 follow the mandate numbering. The closing defining outcome is retained in section 19.
-
-## 0. Unnumbered mandate preamble
-
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-00-01 | Establish the dedicated zeo-maintainer seat to deliver a coherent publicly distributable open-source product. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-00-02 | Use zeroemployeeorg/zeo as the flagship repository. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-00-03 | Deliver a working, installable, maintainable release; a proposal, links or manually assembled infrastructure is insufficient. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-00-04 | Create the formal SOW using the current authoritative organizational format and preserve the mandate requirements. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-00-05 | Assign permanent work identifiers through the existing mechanism and track implementation and verification separately. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-00-01 | Maintain dedicated ownership of the integrated ZEO distribution. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-00-02 | Use this repository as the public home for the distribution. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-00-03 | Deliver released software that can be installed and operated without assembling its infrastructure by hand. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-00-04 | Maintain an authoritative delivery charter and preserve its requirements in the product register. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-00-05 | Keep stable work identifiers and separate implementation progress from verification results. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 1. Strategic objective
+## 1. Research organizations
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-01-01 | ZEO will provide infrastructure for persistent agent organizations, with particular focus on **ML research teams, small frontier research labs, and neolabs**. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-02 | Users must be able to install ZEO, create their own organization, configure model access, and have agents perform meaningful work under explicit budgets, permissions, and human oversight. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-03 | The same platform must support: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-04 | Our own ZEO development organization. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-05 | A separate Prof Rod organization. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-06 | A separate organization for configured Rasa work. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-07 | Independent organizations created by external adopters. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-08 | Disposable organizations used for experiments. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-09 | These organizations must use released software without depending on our private infrastructure or personal machine configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-10 | Our public release must also establish the foundation for: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-11 | **Research conducted using ZEO:** implementing and reproducing ML publications, running experiments and ablations, and producing inspectable evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-12 | **Research conducted on ZEO:** comparing organizational policies, communication structures, planning methods, memory mechanisms, and resource allocation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-01-13 | Do not reduce this mission to a generic agent chat interface. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-01 | Provide persistent agent-organization infrastructure suitable for ML research groups and small research laboratories. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-02 | Enable users to install the platform, create an organization, connect models and perform useful work with budgets, permissions and human oversight. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-03 | Support multiple independently configured organizations through the same product. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-04 | Support an organization that develops ZEO itself. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-05 | Support an independent personal research organization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-06 | Support a separate organization for a configured external workload. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-07 | Support organizations created by unrelated adopters. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-08 | Allow temporary organizations for controlled experiments. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-09 | Require no access to the maintainers' private services or machine setup when using a release. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-10 | Support research both with the platform and into its organizational behavior. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-11 | Enable reproducible publication implementations, experiments and ablations with inspectable outputs. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-12 | Enable comparisons of organizational policy, communication, planning, memory and resource allocation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-01-13 | Treat useful coordinated execution as a product capability beyond conversational interaction. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 2. Decisions established by the operator
+## 2. Product constraints
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-02-01 | Treat these as requirements: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-02 | Dedicated seat — `zeo-maintainer` | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-03 | Flagship repository — `zeroemployeeorg/zeo` | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-04 | Repository direction — ZEO repositories are to become public and move back under `zeroemployeeorg` | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-05 | Supported execution platform — Linux | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-06 | Public installation — One entry point that installs and configures the complete required system | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-07 | Docker — Must not be a prerequisite for the supported installation | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-08 | Mac hosts — May provide Linux guests through Apple’s Virtualization framework | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-09 | Existing environment infrastructure — Reuse and extend Pomar where appropriate | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-10 | Product experience — One coherent distribution, with coordinated releases and lifecycle management | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-11 | Isolation — Enforced boundaries between organizations and seats | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-12 | Evidence — Completion requires reproducible verification | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-13 | Linux is the common execution platform regardless of whether it runs on a physical Linux machine, an existing VPS, or a Linux VM hosted on a Mac. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-14 | Existing implementation languages may remain where appropriate. A language change must solve a demonstrated problem and be justified separately. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-02-15 | A monorepo migration is not required. Preserve useful component boundaries while delivering one integrated product. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-01 | Retain the established product and platform constraints throughout delivery. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-02 | Assign distribution maintenance to a dedicated role. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-03 | Keep a clearly identified public distribution repository. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-04 | Publish product repositories in the project's public organization after publication review. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-05 | Use Linux as the execution baseline. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-06 | Provide a single starting point for installation and system configuration. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-07 | Support the normal installation without requiring Docker. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-08 | Permit an Apple Silicon host adapter to provision Linux guests using the native virtualization framework. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-09 | Extend Pomar's existing environment facilities when they meet the product requirements. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-10 | Coordinate component versions, releases and lifecycle operations as one product. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-11 | Enforce boundaries between organizations and between seats. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-12 | Back completion claims with repeatable verification. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-13 | Use the same Linux application baseline on physical machines, hosted servers and supported guests. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-14 | Justify any language replacement with an observed engineering need. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-02-15 | Retain useful repository boundaries while integrating the product; repository consolidation is optional. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 3. Mandate of the `zeo` seat
+## 3. Distribution responsibilities
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-03-01 | The `zeo` seat owns the **whole-product release and adoption experience**. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-02 | It is accountable for: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-03 | The flagship repository. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-04 | The supported platform specification. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-05 | Distribution assembly and release manifests. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-06 | Installation and onboarding. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-07 | Cross-component integration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-08 | Release-level acceptance tests. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-09 | Upgrade, backup, restore, and uninstall workflows. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-10 | Public documentation and contributor onboarding. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-11 | Public release artifacts and release notes. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-12 | Coordination of the component work required to make releases function. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-13 | Existing component seats retain responsibility for their components. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-14 | However, `zeo` must actively drive integration defects to resolution. It may not declare its work complete because each component owner reports passing local tests. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-15 | The Architect arbitrates ownership disputes, missing ownership, and incompatible contracts. Every release-blocking dependency must have an owner and tracked work item. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-03-16 | The `zeo` seat must remain dedicated to this mandate rather than becoming a general pool for unrelated tasks. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-01 | Make distribution maintainers accountable for the complete release and adoption experience. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-02 | Assign ownership of each whole-product delivery responsibility. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-03 | Maintain the public distribution repository. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-04 | Own and publish the supported platform contract. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-05 | Own release assembly and compatible component manifests. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-06 | Own installation and onboarding across components. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-07 | Resolve integration behavior across component boundaries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-08 | Own product-level release acceptance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-09 | Own coordinated upgrade, backup, restore and removal workflows. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-10 | Maintain public user and contributor guidance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-11 | Publish release artifacts and notes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-12 | Coordinate changes needed from component maintainers to deliver usable releases. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-13 | Retain component maintainers' responsibility for their implementations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-14 | Keep integration defects open until the complete product works, regardless of isolated component test results. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-15 | Give each blocking dependency an owner and work item, with an explicit escalation path for ownership or contract conflicts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-03-16 | Keep the distribution maintenance role focused on product delivery. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 4. Begin with an evidence-backed inventory
+## 4. Component inventory
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-04-01 | Inspect the actual repositories, installed services, and deployment configurations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-02 | Produce an inventory covering at least: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-03 | Runtime. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-04 | Architect. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-05 | Messenger. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-06 | Agenda. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-07 | Controlling. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-08 | Connect. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-09 | App and its backend. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-10 | Pomar. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-11 | Connect and credential integrations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-12 | Recorder, evidence, and artifact facilities. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-13 | Shared contracts and libraries. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-14 | Other components discovered to be required. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-15 | For each component, record: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-16 | Repository and revision — Exact source inspected | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-17 | Current owner — Responsible seat | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-18 | Purpose — Actual implemented responsibility | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-19 | Implementation — Languages, build tools, runtime dependencies | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-20 | Platform assumptions — Linux, macOS, architecture, host-specific integrations | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-21 | Execution model — Library, CLI, service, worker, scheduled job | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-22 | State — Databases, files, ownership, migrations | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-23 | Interfaces — APIs, events, contracts, authentication | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-24 | Deployment — Current installation and service supervision | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-25 | Dependencies — Other components and external services | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-26 | Publication blockers — Private dependencies, embedded data, missing rights or licensing decisions | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-27 | Release blockers — Missing functionality or unverified behavior | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-28 | Evidence — Commands, paths, tests, or observations supporting the entry | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-29 | Explicitly identify hardcoded references to personal usernames, hostnames, paths, accounts, domains, organization IDs, and private services. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-04-30 | Mark unknowns as unknown. Do not infer capabilities from names, old plans, or documentation without implementation evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-01 | Inspect source, installed services and deployment configuration before asserting current capabilities. | Distribution maintainers | In progress | Candidate inventory changes; release qualification pending | Source observations summarized in INVENTORY.md; deployment evidence pending | Inventory incomplete; integration behavior unqualified | Remaining component and installation evidence |
+| ZEO-04-02 | Maintain an inventory spanning every required product component. | Distribution maintainers | In progress | Candidate inventory changes; release qualification pending | Source observations summarized in INVENTORY.md; deployment evidence pending | Inventory incomplete; integration behavior unqualified | Remaining component and installation evidence |
+| ZEO-04-03 | Include Runtime in the component inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-04 | Include organizational coordination in the inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-05 | Include Messenger in the inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-06 | Include Agenda in the inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-07 | Include Controlling in the inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-08 | Include Connect in the inventory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-09 | Inspect both the user application and its backend. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-10 | Inspect Pomar's environment implementation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-11 | Inventory identity, connection and credential integrations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-12 | Inventory recording, evidence storage and artifact handling. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-13 | Inspect shared libraries and interface contracts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-14 | Add required components discovered during inspection. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-15 | Use a consistent evidence record for every component. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-16 | Identify the inspected repository and immutable source revision. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-17 | Identify the responsible component maintainer. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-18 | Describe responsibility demonstrated by implementation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-19 | Record languages, build tooling and runtime requirements. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-20 | Record OS, architecture and host-integration assumptions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-21 | Describe the actual process or library execution model. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-22 | Identify durable state, its ownership and migration behavior. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-23 | Record APIs, events, contract versions and authentication boundaries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-24 | Record installation and supervision mechanisms. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-25 | List product and external-service dependencies. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-26 | Track publication obstacles, including private dependencies and unresolved rights. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-27 | Track functionality gaps and behavior that still lacks release evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-28 | Cite the observations or checks supporting inventory findings. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-29 | Identify machine-, account- and organization-specific constants that obstruct independent installation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-04-30 | Label unresolved facts explicitly and substantiate capabilities from implementation rather than plans or names. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 5. Define the supported Linux platform
+## 5. Linux support
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-05-01 | Select and document: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-02 | The initial supported distribution and version. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-03 | CPU architectures supported at launch. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-04 | Minimum and recommended resources, supported by measurements. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-05 | Required system facilities. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-06 | Network requirements. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-07 | Storage requirements. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-08 | Privileged setup operations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-09 | Supported model and agent authentication flows. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-10 | Design for Linux ARM64 and AMD64. Publish support claims only for architectures that pass the required release tests. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-11 | The supported product must not depend on macOS Keychain, launchd, AppleScript, macOS filesystem conventions, or other macOS-only facilities inside its Linux execution environment. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-12 | Host-side Mac virtualization support may use platform-specific code. Keep that adapter separate from Linux product logic. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-05-13 | Document any existing workflows that remain macOS-specific and provide a migration or optional integration plan. Do not silently remove necessary functionality. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-01 | Publish a supported Linux configuration with an explicit compatibility boundary. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-02 | Name the initial Linux distribution and supported version. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-03 | Name architectures qualified for the first release. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-04 | Measure minimum and recommended resource needs. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-05 | Specify required OS services and facilities. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-06 | Document necessary network connectivity. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-07 | Specify storage capacity and persistence requirements. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-08 | Identify installation steps requiring elevated privileges. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-09 | Document supported model and agent authentication flows. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-10 | Design for ARM64 and AMD64 while claiming support only after architecture-specific release tests. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-11 | Keep Linux application execution independent of macOS credential, service and filesystem facilities. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-12 | Isolate host-specific virtualization code from Linux product logic. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-05-13 | Preserve needed host-specific workflows through a documented migration or optional adapter. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 6. Define responsibilities between ZEO, Runtime, Pomar, and the OS
+## 6. Component boundaries
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-06-01 | Inspect current contracts before finalizing these boundaries. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-02 | The intended separation is: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-03 | **ZEO distribution:** assembles compatible components and manages installation and release lifecycle. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-04 | **Runtime:** manages agent execution and organizational runtime responsibilities. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-05 | **Pomar:** provides and manages execution environments through supported backends. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-06 | **Linux service management:** starts and supervises operating-system services. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-07 | **Architect:** coordinates organizational work. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-08 | Do not create duplicate schedulers, registries, credential stores, or environment managers without demonstrating why existing facilities cannot serve. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-09 | A repository does not automatically require a daemon. Choose process boundaries based on lifecycle, isolation, resource use, and failure behavior. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-06-10 | Maintain explicit versioned contracts between components. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-01 | Inspect existing contracts before assigning final implementation boundaries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-02 | Maintain distinct responsibilities for distribution, execution, environments, OS supervision and organizational coordination. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-03 | Have the distribution assemble compatible software and manage its release lifecycle. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-04 | Have Runtime own agent execution and organizational runtime behavior. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-05 | Have Pomar supply execution environments through supported backends. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-06 | Use Linux service management for OS service supervision. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-07 | Keep organizational work coordination in the coordination component. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-08 | Reuse schedulers, registries, credential facilities and environment managers unless a documented gap requires an alternative. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-09 | Choose process boundaries from lifecycle, isolation, resource and failure needs rather than repository count. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-06-10 | Version inter-component contracts explicitly. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 7. Build the complete distribution
+## 7. Release assembly
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-07-01 | A ZEO release must identify an exact compatible combination of components. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-02 | The release manifest must record: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-03 | Distribution version. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-04 | Component versions and source revisions. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-05 | Platform and architecture. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-06 | Artifact checksums. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-07 | Required runtime dependencies. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-08 | Contract versions. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-09 | Database schema and migration compatibility. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-10 | Build provenance. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-11 | Supported upgrade paths. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-12 | Relevant agent-tool versions and compatibility constraints. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-13 | Normal installation must use built release artifacts. Do not require users to clone and compile all component repositories. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-14 | The flagship repository must contain the installer and distribution source, integration tests, documentation, examples, and the materials necessary to understand and reproduce release assembly. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-07-15 | Do not maintain manually copied component source trees that become divergent shadow repositories. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-01 | Pin one compatible component set for each distribution release. | Distribution maintainers | In progress | Candidate release-preflight implementation; commit pending | Linux compile, vet and race-test gate pending | Metadata checks do not qualify a release or installation | Published compatible artifacts, trust verification and integration acceptance |
+| ZEO-07-02 | Make the release manifest sufficient to identify and reproduce the assembly. | Distribution maintainers | In progress | Candidate release-preflight implementation; commit pending | Linux compile, vet and race-test gate pending | Metadata checks do not qualify a release or installation | Published compatible artifacts, trust verification and integration acceptance |
+| ZEO-07-03 | Record the distribution's release version. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-04 | Pin component versions and source revisions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-05 | Identify the target OS and architecture. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-06 | Record artifact integrity digests. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-07 | Declare runtime dependencies. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-08 | Record interface contract versions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-09 | Describe schema versions and migration compatibility. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-10 | Retain build provenance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-11 | List supported predecessor releases for upgrade. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-12 | Pin relevant agent tools and their compatibility constraints. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-13 | Install prebuilt release artifacts rather than requiring users to compile the component repositories. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-14 | Keep distribution implementation, assembly instructions, integration tests, examples and documentation in this repository. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-07-15 | Consume component releases without maintaining manually copied source forks inside the distribution. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 8. Deliver one installation entry point
+## 8. Integrated installation
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-08-01 | On a clean supported Linux machine, the user must be able to begin installation through one documented entry point. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-02 | The installation must: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-03 | Detect compatibility and resources. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-04 | Explain required privileged changes. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-05 | Download and verify the selected release. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-06 | Install required dependencies through controlled, documented mechanisms. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-07 | Create service identities and protected state locations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-08 | Configure component connectivity. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-09 | Install and start service definitions. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-10 | Run health and integration checks. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-11 | Present the onboarding interface or a clear remote-access method. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-12 | Report success only when the required system is usable. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-13 | It must handle partial installation, interruption, and reruns without duplicating organizations, corrupting state, or leaving unexplained changes. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-14 | Do not require the user to manually configure Messenger, Runtime, Architect, Agenda, Controlling, and App individually. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-15 | “One-click” allows necessary credentials and user choices. It does not allow manual infrastructure assembly. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-08-16 | A remote VPS installation must work without a desktop environment. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-01 | Offer one documented installation entry point on a fresh supported Linux host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-02 | Make that entry point carry out the full installation sequence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-03 | Check host compatibility and available resources. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-04 | Explain elevated changes before applying them. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-05 | Fetch the selected release and verify its integrity. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-06 | Install prerequisites through controlled and documented procedures. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-07 | Create service identities and protect persistent state directories. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-08 | Configure communication between required components. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-09 | Install and activate the required OS service definitions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-10 | Run health and integration verification. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-11 | Provide onboarding access, including a usable remote-access route. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-12 | Declare installation successful only when the required product is usable. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-13 | Recover safely from interrupted or repeated installation without duplicating organizations or damaging state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-14 | Configure the required application and organizational services as an integrated installation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-15 | Allow necessary credentials and user choices without requiring manual infrastructure assembly. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-08-16 | Support unattended-server environments without a desktop session. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 9. Provide onboarding that reaches useful work
+## 9. Onboarding
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-09-01 | Onboarding must guide the user through: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-02 | Creating an organization. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-03 | Configuring supported model or coding-agent access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-04 | Establishing budget and concurrency limits. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-05 | Selecting or creating a workspace. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-06 | Starting an initial project. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-07 | Inspecting progress and results. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-08 | Responding to an agent’s request for input. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-09 | Never assume our personal provider accounts, subscription arrangements, credentials, or private services are available. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-10 | Document the authentication modes actually tested. Do not claim that API-key support proves subscription-based agent authentication works, or vice versa. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-09-11 | Provide a modest, bounded introductory workflow with a verifiable deliverable. It must exercise genuine coordination and execution rather than merely displaying service health. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-01 | Guide users from first installation to a useful initial project. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-02 | Guide creation of an independent organization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-03 | Configure a supported model or coding-agent connection. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-04 | Establish spending and execution-concurrency limits. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-05 | Select or create the working directory. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-06 | Start a bounded first project. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-07 | Show progress and completed results. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-08 | Allow users to answer requests for input. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-09 | Avoid reliance on maintainers' accounts, subscriptions, credentials or private services. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-10 | Qualify API-key and subscription authentication separately and document only tested modes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-09-11 | Complete a small coordinated execution workflow with a verifiable deliverable, beyond service-health checks. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 10. Support independent organization instances
+## 10. Organization independence
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-10-01 | Organization identity must be explicit throughout the system. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-02 | Each instance must have its own: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-03 | Architect identity and continuity. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-04 | Agent identities. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-05 | Configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-06 | Workspaces. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-07 | Messages. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-08 | Projects and commitments. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-09 | Credentials and access grants. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-10 | Budgets and usage records. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-11 | Memory and evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-12 | Persistent state. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-13 | Backup and restore scope. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-14 | Shared binaries are acceptable. Implicitly shared authority or organizational state is not. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-15 | Support independent start, stop, inspection, backup, and removal. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-16 | The release design must explain whether different distribution versions can coexist on one host. If that is initially unsupported, enforce and document the limitation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-10-17 | Prove isolation with two organizations running simultaneously. Include tests that attempt unauthorized cross-organization access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-01 | Carry explicit organization identity throughout product interfaces and state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-02 | Partition each organization's authority and recovery scope. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-03 | Separate organizational coordinator identity and continuity. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-04 | Separate agent identities by organization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-05 | Keep organization configuration independent. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-06 | Keep organization workspaces independent. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-07 | Keep message storage independent. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-08 | Separate project and commitment records. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-09 | Scope credentials and grants to the owning organization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-10 | Separate budgets and usage accounting. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-11 | Separate memory and evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-12 | Separate durable application state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-13 | Define organization-specific backup and restore boundaries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-14 | Permit shared executable files while keeping authority and organizational data separate. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-15 | Operate, inspect, back up and remove each organization independently. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-16 | Document and enforce whether multiple distribution versions can coexist on one host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-10-17 | Demonstrate concurrent organizations and reject unauthorized cross-organization access. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 11. Preserve seat isolation inside Linux
+## 11. Seat isolation
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-11-01 | Do not equate seat count with VM count. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-02 | Support multiple seats inside a Linux environment with enforced identities, filesystem permissions, process controls, and resource limits. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-03 | Agent processes must not receive unrestricted host administration privileges by default. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-04 | Specify: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-05 | Seat identity allocation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-06 | Workspace ownership. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-07 | Credential access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-08 | Shared-resource access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-09 | Process and session ownership. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-10 | CPU, memory, and process limits. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-11 | Seat creation, suspension, recovery, and deletion. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-12 | The mechanism for privileged operations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-13 | Document the limits of shared-kernel isolation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-11-14 | Use separate VMs where the workload or trust boundary requires stronger isolation. Avoid provisioning one VM per seat without a demonstrated need. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-01 | Represent seat identity and isolation requirements explicitly rather than inferring them from seat counts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-02 | Support enforced identities, workspace permissions, process controls and resource limits within Linux; apply the environment-profile policy in section 20. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-03 | Run agents without unrestricted host-administration rights by default. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-04 | Specify the complete seat isolation and lifecycle contract. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-05 | Define allocation of seat identities. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-06 | Define workspace ownership. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-07 | Define access to credentials. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-08 | Define access to shared resources. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-09 | Define process and session ownership. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-10 | Enforce CPU, memory and process-count limits. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-11 | Define seat provisioning, suspension, recovery and deletion. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-12 | Provide a controlled route for privileged operations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-13 | Explain the security limits of shared-kernel execution. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-11-14 | Select stronger VM isolation where required; measure allocations and follow section 20 without silently weakening requested boundaries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 12. Integrate Pomar and the Mac-hosted Linux path
+## 12. Environment backends
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-12-01 | Inventory Pomar’s implemented capabilities before committing to a backend design. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-02 | Establish a tested route for: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-03 | A Linux target on an existing VPS. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-04 | A Linux guest hosted on an Apple Silicon Mac. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-05 | Disposable execution environments for experiments. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-06 | For Mac-hosted Linux, verify: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-07 | ARM64 guest compatibility. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-08 | VM creation and provisioning. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-09 | CPU and memory configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-10 | Networking and access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-11 | Disk persistence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-12 | Start, stop, and restart. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-13 | Host reboot behavior. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-14 | Logging and failure reporting. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-15 | Backup and recovery. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-16 | Resource contention under representative workloads. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-17 | Do not assume nested virtualization or GPU access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-18 | A management VM and worker VM may be a useful topology, but validate the choice against actual resource consumption. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-19 | The immediate intended migration is to run Architect and ZEO workloads in Linux on the Mac mini. Preserve a recovery route onto Hetzner. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-12-20 | Do not migrate the entire live organization before a representative pilot passes. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-01 | Inspect existing Pomar capabilities before choosing backend changes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-02 | Qualify the required environment delivery routes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-03 | Support an existing Linux server as an execution target. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-04 | Support an ARM64 Linux guest on an Apple Silicon host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-05 | Provide disposable environments for experiments. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-06 | Verify host-adapter behavior as part of Linux guest qualification. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-07 | Qualify the ARM64 guest userspace and artifacts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-08 | Verify guest creation and provisioning. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-09 | Verify CPU and memory allocation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-10 | Verify connectivity and access. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-11 | Verify durable virtual disks. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-12 | Verify guest start, stop and restart. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-13 | Verify behavior after the physical host reboots. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-14 | Provide useful guest logs and failure reporting. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-15 | Verify backup and recovery of the guest's required state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-16 | Measure resource contention under representative load. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-17 | Require demonstrated capability before depending on nested virtualization or GPU access. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-18 | Evaluate management and worker topology through resource measurements. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-19 | Pilot coordinator and agent workloads in host-provided Linux while retaining recovery onto a separate supported server. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-12-20 | Expand a live migration only after a representative pilot passes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 13. Deliver lifecycle management
+## 13. Lifecycle and recovery
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-13-01 | The product must support: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-02 | Status — Show component and organization health with actionable failures | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-03 | Start/stop — Respect dependencies and preserve state | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-04 | Reboot — Recover required services and identify interrupted work | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-05 | Upgrade — Check compatibility, preserve data, and apply coordinated migrations | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-06 | Failed upgrade — Leave a diagnosable and recoverable state | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-07 | Backup — Capture a consistent, documented recovery set | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-08 | Restore — Recover onto a clean supported host | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-09 | Diagnostics — Produce useful reports with secrets excluded | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-10 | Uninstall — Remove installed services cleanly and explicitly handle retained data | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-11 | Do not promise rollback across irreversible schema migrations. Define when recovery requires restoring a backup. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-12 | For cross-component backups, specify how consistency is established. Copying live database and state files without a consistency mechanism is insufficient. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-13-13 | Cross-architecture recovery must be tested or explicitly limited. Do not assume that process checkpoints or tool sessions are portable between ARM64 and AMD64. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-01 | Provide coordinated product lifecycle operations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-02 | Report component and organization health with actionable failures. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-03 | Start and stop services in dependency order while preserving state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-04 | Recover required services after reboot and accurately identify interrupted work. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-05 | Check compatibility and preserve data through coordinated upgrades and migrations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-06 | Keep failed upgrades diagnosable and recoverable. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-07 | Capture a consistent and documented backup set. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-08 | Restore supported state onto a fresh supported host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-09 | Collect useful diagnostics without exposing secrets. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-10 | Remove installed services cleanly and state explicitly what data remains. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-11 | Define backup-based recovery for irreversible migrations instead of promising unsupported rollback. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-12 | Establish consistency across components before backing up live databases and files. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-13-13 | Qualify cross-architecture recovery explicitly, including limits on process and agent-session portability. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 14. Establish the experimentation capability
+## 14. Research workflows
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-14-01 | Create a bounded implementation plan and deliver an initial end-to-end research workflow. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-02 | The experimentation capability must represent: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-03 | Research question and hypothesis. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-04 | Protocol and baselines. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-05 | Workload and dataset identity. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-06 | Source revisions and environment. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-07 | Model and agent configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-08 | Seeds where applicable. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-09 | Budgets and stopping rules. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-10 | Runs and retries. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-11 | Metrics and evaluation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-12 | Artifacts and provenance. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-13 | Failures and human interventions. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-14 | Conclusions linked to evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-15 | Expose a researcher-friendly Python interface or integration path. Reuse established research tools where appropriate rather than rebuilding training frameworks or metric trackers. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-16 | Separate: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-17 | Distribution version. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-18 | Organization configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-19 | Experimental treatment. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-20 | Workload and evaluator version. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-21 | For example, comparing GTD with another policy must be possible on the same software release. Do not confound a policy change with unrelated development changes. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-22 | Provide one small ML reproduction or experiment workflow and one organizational-policy comparison workflow. Record limitations honestly, including hosted-model variability and any barriers to exact replay. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-14-23 | Experimental instances must not inherit production credentials or external write permissions by accident. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-01 | Deliver a bounded end-to-end research workflow and its implementation plan. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-02 | Represent enough experimental context to interpret and reproduce results. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-03 | Record the research question and hypothesis. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-04 | Record protocol and baseline choices. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-05 | Identify workloads and datasets. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-06 | Pin source and execution environments. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-07 | Record model and agent settings. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-08 | Record applicable random seeds. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-09 | Record budgets and termination conditions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-10 | Track run identities and retries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-11 | Record evaluation methods and metrics. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-12 | Preserve artifacts and provenance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-13 | Record failures and human interventions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-14 | Link conclusions to supporting evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-15 | Provide a Python-oriented research integration while reusing established experiment and training tools. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-16 | Version experimental dimensions independently. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-17 | Identify the distribution release separately. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-18 | Identify organization configuration separately. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-19 | Identify experimental treatment separately. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-20 | Identify workload and evaluator revisions separately. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-21 | Compare policies on the same software release without introducing unrelated software changes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-22 | Provide a small ML experiment or reproduction and an organizational-policy comparison, with honest replay and hosted-model limitations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-14-23 | Prevent experiments from accidentally acquiring production credentials or external write authority. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 15. Move and publish the repositories
+## 15. Public source distribution
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-15-01 | Inventory every repository in the ZEO scope and propose the definitive destination mapping under `zeroemployeeorg`. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-02 | Include dependencies and auxiliary repositories required to build, run, test, or understand the public product. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-03 | Prepare and execute the transfers and public releases through the available authorized mechanisms. Report concrete blockers if platform permissions or ownership prevent execution. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-04 | Before changing visibility: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-05 | Inspect tracked contents and history for secrets and private operational data. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-06 | Remove publication blockers; rotate exposed credentials when required. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-07 | Resolve private dependency links. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-08 | Update module paths, package references, documentation, CI, and release automation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-09 | Record ownership and licence status of included code and assets. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-10 | Identify the open-source licence decision needed where one is not already established. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-11 | Verify the public system can build and run without private repository access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-12 | Publishing source code does not include publishing organizational databases, customer or employer data, private messages, personal credentials, or live configuration. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-13 | Do not rewrite shared history casually. Where remediation requires history changes, specify the impact and coordinate recovery for existing clones. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-15-14 | The public flagship must clearly distinguish what is available, experimental, and planned. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-01 | Map every product repository to its intended public destination. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-02 | Include auxiliary build, runtime, test and explanatory dependencies in publication scope. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-03 | Execute authorized publication and transfer steps, recording concrete permission or ownership blockers. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-04 | Complete publication checks before exposing additional source or history. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-05 | Review tracked files and history for secrets and private operational information. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-06 | Resolve publication blockers and rotate credentials if exposure requires it. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-07 | Eliminate dependencies that require inaccessible private repositories. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-08 | Update package identifiers, module references, documentation and release automation for public distribution. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-09 | Record rights and licence status for included source and assets. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-10 | Resolve missing open-source licence decisions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-11 | Prove that public users can build and operate the system without private repository access. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-12 | Exclude organizational databases, confidential records, messages, credentials and live configuration from publication. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-13 | Coordinate any necessary shared-history remediation and its effect on existing clones. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-15-14 | Distinguish released, experimental and planned features in public product material. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 16. Make external contribution practical
+## 16. External contribution
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-16-01 | Provide: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-02 | A clear product explanation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-03 | A working quickstart. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-04 | An architecture overview. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-05 | Supported platform and resource information. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-06 | A contributor setup that works without our organization. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-07 | Component ownership and issue-routing guidance. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-08 | Contract-change and compatibility procedures. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-09 | Release and support policies. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-10 | A security-reporting route. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-11 | Documented limitations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-12 | Public examples and reproducible acceptance workflows. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-16-13 | An external contributor must be able to start a development instance without obtaining our private state or credentials. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-01 | Make external adoption and contribution practical. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-02 | Explain the product clearly. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-03 | Provide a verified quickstart. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-04 | Explain the product architecture. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-05 | Publish qualified platforms and measured resource needs. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-06 | Provide contributor setup independent of the maintainers' organization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-07 | Document component ownership and issue routing. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-08 | Document contract changes and compatibility handling. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-09 | Publish release and support expectations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-10 | Provide a security-reporting channel. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-11 | State known product limitations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-12 | Publish examples and reproducible acceptance workflows. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-16-13 | Allow a contributor to create a development organization without private state or credentials. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 17. Required verification
+## 17. Release acceptance
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-17-01 | A release candidate is not accepted until the following are demonstrated: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-02 | **Clean installation:** complete installation on a fresh supported Linux host. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-03 | **Useful execution:** a configured organization completes a verifiable project. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-04 | **No private dependency:** installation and operation succeed without access to our private repositories or infrastructure. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-05 | **Reboot recovery:** services restart and interrupted work is represented accurately. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-06 | **Component failure:** failures are surfaced and recovery does not silently duplicate work. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-07 | **Organization isolation:** two instances coexist without unauthorized state or credential access. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-08 | **Seat isolation:** worker identities cannot access another seat’s protected resources. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-09 | **Upgrade:** a supported previous release upgrades with state preserved. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-10 | **Restore:** a consistent backup restores onto another clean host. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-11 | **Mac guest:** the Linux release works inside the supported Mac virtualization path. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-12 | **Representative concurrency:** load testing distinguishes registered seats, idle sessions, and actively executing workloads. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-13 | **Research evidence:** an experiment exports a traceable result package. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-14 | **Uninstall:** removal behaves as documented. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-15 | **Public build:** an external-style checkout can reproduce the documented build and checks. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-16 | Use real model calls for at least the bounded end-to-end acceptance workflow. Deterministic fixtures are appropriate for routine regression tests but must not be presented as proof of live operation. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-17-17 | Record actual measurements. Do not declare that 50 active seats are supported based only on creating 50 identities. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-01 | Require product-level acceptance evidence before accepting a release candidate. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-02 | Demonstrate complete installation on a fresh qualified Linux host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-03 | Have a configured organization finish a project with independently checkable results. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-04 | Demonstrate installation and useful operation without private services or repositories. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-05 | Demonstrate correct service and interrupted-work recovery after reboot. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-06 | Inject component failures and verify visible failures, recovery and duplicate-work prevention. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-07 | Run two organizations together and reject cross-organization state or credential access. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-08 | Demonstrate that worker identities cannot read another seat's protected resources. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-09 | Upgrade a supported predecessor release while preserving its state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-10 | Restore a consistent backup onto a different clean host. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-11 | Qualify the release inside the supported Apple-hosted Linux guest. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-12 | Measure registered identities, idle sessions and active execution separately during load tests. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-13 | Export an experiment result package with traceable provenance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-14 | Verify removal against the documented data-retention behavior. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-15 | Reproduce the documented build and checks from an external-style public checkout. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-16 | Use real model execution in a bounded acceptance workflow; keep regression fixtures distinct from live-operation evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-17-17 | Publish actual workload measurements rather than inferring active capacity from identity counts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 18. Delivery sequence
+## 18. Delivery milestones
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-18-01 | Organize the work into these milestones: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-02 | **A. Inventory and ownership** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-03 | Produce the repository-backed inventory, dependency map, platform gaps, publication blockers, and assigned work. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-04 | **B. First complete Linux installation** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-05 | Deliver a release candidate that installs the necessary system and completes a bounded workflow on a clean Linux host. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-06 | **C. Lifecycle and isolation** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-07 | Prove reboot recovery, independent organizations, seat isolation, upgrade, backup, restore, and uninstall. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-08 | **D. Mac-hosted Linux pilot** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-09 | Run the same release through the supported Pomar/Mac path. Migrate representative seats before scaling. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-10 | **E. Research workflows** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-11 | Deliver the initial experimentation and publication-reproduction capabilities with traceable outputs. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-12 | **F. Public release** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-13 | Complete repository migration and publication, public installation tests, documentation, and release artifacts. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-18-14 | Prepare repository publication work in parallel where dependencies allow. Do not postpone discovering publication blockers until the end. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-01 | Deliver the product through observable milestones. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-02 | Complete the inventory and ownership milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-03 | Produce source-backed component/dependency findings, platform gaps, publication blockers and assigned work. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-04 | Complete the first integrated Linux-installation milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-05 | Install a release candidate on a clean Linux host and finish a bounded workflow. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-06 | Complete the lifecycle and isolation milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-07 | Demonstrate independent organizations, seat boundaries, reboot recovery, upgrade, backup, restore and uninstall. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-08 | Complete the supported guest-platform pilot milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-09 | Run the same release through Pomar's host adapter and migrate representative workloads before expanding. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-10 | Complete the research-workflow milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-11 | Deliver experiment and publication-reproduction workflows with traceable outputs. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-12 | Complete the public-release milestone. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-13 | Finish public source publication, installation tests, documentation and release artifacts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-18-14 | Investigate publication blockers alongside implementation instead of postponing discovery until release. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
-## 19. Reporting and accountability
+## 19. Progress reporting
 
-| Work ID | Mandate requirement / context | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
 |---|---|---|---|---|---|---|---|
-| ZEO-19-01 | For every requirement, track: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-02 | Owner. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-03 | Work identifier. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-04 | Status. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-05 | Implementation revision. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-06 | Verification evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-07 | Known limitations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-08 | Remaining dependencies. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-09 | Use explicit states: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-10 | **Not started / In progress / Implemented / Verified / Blocked.** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-11 | “Implemented” does not mean “verified.” “Merged” does not mean “deployed.” “Services running” does not mean “the organization works.” | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-12 | The final release report must include: | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-13 | The exact distribution and component revisions. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-14 | Installation artifacts and public locations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-15 | Supported configurations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-16 | Acceptance-test results. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-17 | Observed resource usage. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-18 | Upgrade and recovery evidence. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-19 | Repository migration status. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-20 | Outstanding limitations. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-21 | Every unfulfilled requirement and its reason. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-22 | Your first response should confirm creation of the `zeo` seat and SOW, identify the actual repositories inspected, and provide the initial work breakdown and blockers. Continue into implementation within this mandate; do not stop after returning a roadmap. | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
-| ZEO-19-23 | **The defining outcome is that someone outside our organization can install ZEO on a supported Linux environment, establish an independent agent organization, perform useful research work, and operate and recover the system without our personal assistance.** | zeo-maintainer | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-01 | Track delivery facts for every requirement. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-02 | Name the accountable owner. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-03 | Assign a permanent work identifier. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-04 | Record the current delivery state. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-05 | Record the implementing source revision. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-06 | Link verification evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-07 | State known limitations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-08 | Identify unresolved dependencies. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-09 | Use defined progress states consistently. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-10 | Use Not started, In progress, Implemented, Verified and Blocked as distinct states. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-11 | Distinguish code implementation, verification, merge, deployment and successful organization operation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-12 | Publish a release report with enough detail to audit its claims. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-13 | Identify exact product and component revisions. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-14 | Identify installable artifacts and public download locations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-15 | List supported configurations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-16 | Report acceptance outcomes. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-17 | Report measured resource usage. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-18 | Provide upgrade and recovery evidence. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-19 | Report publication and repository-migration progress. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-20 | Disclose outstanding limitations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-21 | Name every unmet requirement and explain why it remains open. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-22 | Start delivery reporting with inspected components, assigned work and blockers, and continue into implementation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-19-23 | Enable an external user to install, configure, operate and recover an independent research organization without personal assistance. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+
+## 20. Common Linux environment profiles
+
+| Work ID | Product requirement | Owner | State | Implementation revision | Verification evidence | Known limitations | Remaining dependencies |
+|---|---|---|---|---|---|---|---|
+| ZEO-20-01 | Install the ZEO distribution into a versioned Linux environment provided by Pomar. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-02 | Keep environment profiles, product releases, organization settings and experiment treatments independently versioned. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-03 | Separate Linux-target creation or attachment from reusable Linux provisioning. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-04 | Target a Pomar instance per seat on Apple Silicon, with separate host-user custody and measured guest capacity. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-05 | Support ARM64 and AMD64 hosted Linux targets without requiring nested virtualization. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-06 | Keep Docker optional for the standard environment path. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-07 | Describe Linux baseline, layout, tools, dependencies, services and resource limits in the environment profile. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-08 | Store credential references in reusable profiles while delivering secret material through controlled mechanisms. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-09 | Report the actual isolation boundary and reject unsupported placements without silent weakening. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-10 | Retain Runtime's placement authority and Pomar's environment authority without duplicating schedulers or seat registries. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-11 | Expose repeatable inspect, attach/create, provision, drift, start/stop, health, logs, backup/restore, reset and removal operations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-12 | Run the same environment conformance suite on Apple-hosted ARM64 guests and hosted ARM64 and AMD64 Linux targets. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-13 | Run the same bounded released-product workflow on each qualified backend. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-14 | Separate reconstructable environments, durable organizational state, work products, disposable data and secrets. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-15 | Recover across architectures using appropriate rebuilt artifacts and compatible state rather than assuming VM-image portability. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-16 | Qualify agent-session portability and provide a work-preserving handover when resumption is unsupported. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-17 | Fence live migration so only one copy of an organization has execution authority. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-18 | Qualify a small isolated pilot before scaling the seat population. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-19 | Select architecture-specific artifacts and verify their versions and digests automatically. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-20 | Check requested workload capabilities against the target and return useful placement refusals. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-21 | Record architecture and hardware provenance without promising identical performance or ML results across hosts. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-22 | Inspect and reuse existing released environment features before introducing replacement implementations. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-23 | Consume qualified published environment releases and require adoption evidence before moving gates or production deployment. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
+| ZEO-20-24 | Measure host capacity before choosing per-seat guest allocations or any grouped topology; disclose the resulting isolation. | Distribution maintainers | Not started | — | — | UNKNOWN | UNKNOWN |
 
