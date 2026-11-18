@@ -4,10 +4,16 @@
 
 ZEO is being assembled as an open-source platform for persistent agent organizations, including ML research teams and small research laboratories. It aims to let users create independent organizations, connect models, set budgets and permissions, and inspect the results of coordinated work.
 
-Available today: the [product requirements](REQUIREMENTS.md) and [component inventory](INVENTORY.md). An integrated installer and qualified distribution release are not available yet. Existing component capabilities do not establish that the complete platform works.
+Available today: the [product requirements](REQUIREMENTS.md), [component inventory](INVENTORY.md), and candidate release-preflight source in `cmd/zeo-release`. An integrated installer and qualified distribution release are not available yet. Existing component capabilities do not establish that the complete platform works.
 
 The installation target is one entry point for the complete Linux product, using compatible prebuilt component artifacts. Pomar supplies versioned execution environments; the distribution supplies the application platform inside them. Releases, environment profiles, organization settings and experiment configurations remain separately versioned.
 
 Planned capabilities include onboarding, coordinated service operation, organization and seat isolation, upgrade and recovery, and reproducible research workflows. ARM64 and AMD64 support will be claimed only after release acceptance on each qualified backend. Docker is not a prerequisite for the intended standard path.
 
 Implementation and verification are tracked separately. Public quickstart, contribution, security-reporting, licensing and release policies remain incomplete. Contributions must exclude credentials and private operational state.
+
+Release preflight uses `zeo.release/v1` metadata: a distribution version, Linux platform, separately versioned environment profile, pinned components/artifacts, runtime dependencies, shared contracts, state compatibility, upgrade paths, agent tools and build provenance. It requires coverage of the core product responsibilities without assuming a daemon per component. Runtime integration dependencies may be cyclic; explicit installation ordering must be acyclic.
+
+The tool rejects ambiguous JSON, mismatched targets, missing capabilities, conflicting pins, unsafe artifact locations and invalid local artifact bytes. `--artifacts` verifies local files; it does not download or extract them. Plans retain their platform/profile and a digest of the typed metadata representation; that digest is not a signature or a raw-manifest trust anchor. HTTPS URL checks are syntactic and do not establish public availability. A successful plan always reports `ready_for_install: false`: metadata and digest checks do not establish compatible runtime behavior, trusted build provenance, installation readiness or product acceptance.
+
+Maintainer development requires Go 1.27.0 and the Linux race-test toolchain. `make verify` checks formatting, compiler/vet diagnostics and race-enabled tests using only standard-library dependencies. The candidate gate has not yet been run. Use `zeo-release --help` for the preflight arguments after building it in the development environment; it is an assembly tool, not the user installation entry point.
