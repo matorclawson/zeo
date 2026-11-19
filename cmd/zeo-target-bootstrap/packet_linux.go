@@ -161,8 +161,7 @@ func parsePacket(raw []byte, pin string) (Packet, []byte, error) {
 	if len(raw) > maxPacket || !hexPin.MatchString(pin) || hash(raw) != pin || decodeClosed(raw, &p) != nil {
 		return p, nil, errRefused
 	}
-	ip, e := netip.ParseAddr(p.SourceIP)
-	if e != nil || ip.String() != p.SourceIP || ip.IsUnspecified() || ip.IsMulticast() || ip.IsLoopback() || ip.Is4In6() {
+	if !validBrokerIP(p.SourceIP) {
 		return p, nil, errRefused
 	}
 	if p.Schema != "zeo.ssh-target-bootstrap/v1" || p.LoginUser != loginUser || !safeName.MatchString(p.Target) || !safeName.MatchString(p.Command) || !hexPin.MatchString(p.ScriptSHA) {
@@ -185,4 +184,11 @@ func parsePacket(raw []byte, pin string) (Packet, []byte, error) {
 		return p, nil, errRefused
 	}
 	return p, script, nil
+}
+
+// IPv6 zone identifiers are interface metadata, not a broker address. Go accepts
+// arbitrary zone text, including authorized_keys delimiters and line breaks.
+func validBrokerIP(value string) bool {
+	ip, err := netip.ParseAddr(value)
+	return err == nil && ip.Zone() == "" && ip.String() == value && !ip.IsUnspecified() && !ip.IsMulticast() && !ip.IsLoopback() && !ip.Is4In6()
 }

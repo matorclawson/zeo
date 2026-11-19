@@ -357,3 +357,97 @@ func TestPacketJSONRoundTripIsNotTrust(t *testing.T) {
 		t.Fatal("raw packet pin ignored")
 	}
 }
+
+func TestBrokerIPv6ZoneCannotInjectAuthorizedKeys(t *testing.T) {
+	m, _ := fixture(t)
+	original, _, _ := testPacket()
+	for _, ip := range []string{"fe80::1%eth0", "2001:db8::1%tailnet", "fe80::1%\"\nssh-ed25519 AAAA unrestricted\n#"} {
+		p := original
+		p.SourceIP = ip
+		raw := encode(p)
+		if _, _, err := parsePacket(raw, hash(raw)); err == nil {
+			t.Fatal("IPv6 zone accepted", ip)
+		}
+		if line := m.Paths.keyLine(p); len(line) != 0 {
+			t.Fatal("unsafe address serialized", string(line))
+		}
+	}
+	for _, ip := range []string{"192.0.2.11", "2001:db8::1"} {
+		p := original
+		p.SourceIP = ip
+		raw := encode(p)
+		if _, _, err := parsePacket(raw, hash(raw)); err != nil {
+			t.Fatal("canonical address refused", ip)
+		}
+		line := string(m.Paths.keyLine(p))
+		want := "restrict,from=\"" + ip + "\",command=\"" + m.Paths.tool() + " dispatch\" " + p.PublicKey + "\n"
+		if line != want || strings.Count(line, "\n") != 1 || strings.Count(line, "\"") != 4 {
+			t.Fatal("key-line template changed", line)
+		}
+	}
+}
+
+func TestRevokeClosesLocalExecutionAndRetainsExactSudoPolicy(t *testing.T) {
+	for _, privilege := range []string{"read", "root"} {
+		t.Run(privilege, func(t *testing.T) {
+			m, _ := fixture(t)
+			p, _, script := testPacket()
+			p.Privilege = privilege
+			raw := encode(p)
+			if _, err := m.apply(p, raw, script); err != nil {
+				t.Fatal(err)
+			}
+			if err := activeAuthorization(m.Paths, p, true); err != nil {
+				t.Fatal("active enrollment refused", err)
+			}
+			var policy []byte
+			if privilege == "root" {
+				var err error
+				policy, err = os.ReadFile(m.Paths.Sudoers)
+				if err != nil {
+					t.Fatal(err)
+				}
+			}
+			if _, err := m.revoke(p, raw, script); err != nil {
+				t.Fatal(err)
+			}
+			if err := activeAuthorization(m.Paths, p, true); err == nil {
+				t.Fatal("revoked enrollment can start local execution")
+			}
+			if privilege == "root" {
+				if exists(m.Paths.Sudoers) {
+					t.Fatal("NOPASSWD rule still active")
+				}
+				retained, err := os.ReadFile(m.Paths.Sudoers + ".revoked")
+				if err != nil || !bytes.Equal(retained, policy) {
+					t.Fatal("sudo policy not preserved exactly", err)
+				}
+			}
+			if _, err := m.revoke(p, raw, script); err != nil {
+				t.Fatal("completed revoke not idempotent", err)
+			}
+		})
+	}
+}
+
+func TestPartialRevocationClosesExecutionBeforeAccountExpiry(t *testing.T) {
+	m, _ := fixture(t)
+	p, _, script := testPacket()
+	p.Privilege = "root"
+	raw := encode(p)
+	if _, err := m.apply(p, raw, script); err != nil {
+		t.Fatal(err)
+	}
+	// Model interruption immediately after the authorization removal. Even with
+	// the original NOPASSWD policy and account still present, neither run mode
+	// may pass the common authorization gate.
+	if err := os.Remove(m.Paths.key()); err != nil {
+		t.Fatal(err)
+	}
+	if !exists(m.Paths.Sudoers) {
+		t.Fatal("fixture lacks surviving elevation rule")
+	}
+	if err := activeAuthorization(m.Paths, p, true); err == nil {
+		t.Fatal("partial revocation allowed new execution")
+	}
+}

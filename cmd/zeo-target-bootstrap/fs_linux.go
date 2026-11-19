@@ -161,7 +161,10 @@ func lockCommand(p Paths) (*os.File, error) {
 }
 
 func verifyLinkedAuthorization(p Paths, expected string) error {
-	f, e := os.OpenFile(p.key()+".revoked", os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
+	return verifyLinkedFile(p.key(), expected, 0644, p.Owner)
+}
+func verifyLinkedFile(path string, expected string, mode os.FileMode, owner uint32) error {
+	f, e := os.OpenFile(path+".revoked", os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
 	if e != nil {
 		return errRefused
 	}
@@ -171,7 +174,7 @@ func verifyLinkedAuthorization(p Paths, expected string) error {
 		return errRefused
 	}
 	st := a.Sys().(*syscall.Stat_t)
-	if !a.Mode().IsRegular() || st.Uid != p.Owner || (p.Owner == 0 && st.Gid != 0) || st.Nlink != 2 || a.Mode().Perm() != 0644 || a.Size() > maxPacket {
+	if !a.Mode().IsRegular() || st.Uid != owner || (owner == 0 && st.Gid != 0) || st.Nlink != 2 || a.Mode().Perm() != mode || a.Size() > maxPacket {
 		return errRefused
 	}
 	raw, e := ioReadBounded(f, maxPacket)
@@ -182,7 +185,7 @@ func verifyLinkedAuthorization(p Paths, expected string) error {
 	if e != nil || !sameStat(st, b.Sys().(*syscall.Stat_t)) {
 		return errRefused
 	}
-	for _, path := range []string{p.key(), p.key() + ".revoked"} {
+	for _, path := range []string{path, path + ".revoked"} {
 		current, e := os.Lstat(path)
 		if e != nil || !sameStat(st, current.Sys().(*syscall.Stat_t)) {
 			return errRefused

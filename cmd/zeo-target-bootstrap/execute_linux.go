@@ -169,10 +169,37 @@ func loadInstalled(p Paths) (Packet, Allocation, []byte, error) {
 	return packet, a, registered, nil
 }
 
+// The active public authorization is also a local execution gate. It is readable
+// by the restricted account; the private enrollment journal is never exposed.
+// Revocation removes this name before account expiry or sudo-policy cleanup.
+func activeAuthorization(p Paths, packet Packet, checkPolicy bool) error {
+	if p.trustedDir(filepath.Join(p.Home, ".ssh")) != nil {
+		return errRefused
+	}
+	expected := p.keyLine(packet)
+	key, err := readStable(p.key(), maxPacket, p.Owner, 0644)
+	if err != nil || len(expected) == 0 || hash(key) != hash(expected) {
+		return errRefused
+	}
+	if packet.Privilege == "root" && checkPolicy {
+		if p.trustedDir(filepath.Dir(p.Sudoers)) != nil {
+			return errRefused
+		}
+		policy, err := readStable(p.Sudoers, maxPacket, p.Owner, 0440)
+		if err != nil || hash(policy) != hash(p.policy()) {
+			return errRefused
+		}
+	}
+	return nil
+}
+
 func dispatch(parent context.Context, p Paths, rootMode bool, stdout, stderr io.Writer) error {
 	packet, a, script, e := loadInstalled(p)
 	if e != nil {
 		return e
+	}
+	if activeAuthorization(p, packet, rootMode) != nil {
+		return errRefused
 	}
 	if rootMode {
 		if packet.Privilege != "root" || os.Getuid() != 0 || os.Geteuid() != 0 || os.Getgid() != 0 || os.Getegid() != 0 {
@@ -201,5 +228,10 @@ func dispatch(parent context.Context, p Paths, rootMode bool, stdout, stderr io.
 		return e
 	}
 	defer lock.Close()
+	// Recheck after taking the execution lock. Already running commands are not
+	// drained by revocation; no new invocation may start after its gate closes.
+	if activeAuthorization(p, packet, rootMode) != nil {
+		return errRefused
+	}
 	return runCaptured(parent, script, time.Duration(packet.Timeout)*time.Second, packet.OutputMax, stdout, stderr)
 }
