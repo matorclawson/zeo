@@ -95,6 +95,40 @@ func TestDuplicateUnknownAndWrongPins(t *testing.T) {
 		}
 	}
 }
+
+func TestFoldedPrivilegeRejectedInBothOrders(t *testing.T) {
+	_, raw, _ := testPacket()
+	body := bytes.TrimSpace(raw)
+	for _, b := range [][]byte{
+		append(append([]byte(nil), body[:len(body)-1]...), []byte(`,"PRIVILEGE":"root"}`)...),
+		append([]byte(`{"PRIVILEGE":"root",`), body[1:]...),
+		bytes.ReplaceAll(raw, []byte(`"privilege"`), []byte(`"PRIVILEGE"`)),
+		bytes.ReplaceAll(raw, []byte(`"login_user"`), []byte(`"LOGIN_USER"`)),
+	} {
+		if _, _, e := parsePacket(b, hash(b)); e == nil {
+			t.Fatal("case-folded schema key accepted")
+		}
+	}
+}
+
+func TestAllocationAndNestedReceiptRequireCanonicalKeys(t *testing.T) {
+	a := Allocation{"zeo.ssh-target-enrollment/v1", strings.Repeat("a", 64), strings.Repeat("b", 64), 12345, 12345, loginUser}
+	for _, b := range [][]byte{bytes.ReplaceAll(encode(a), []byte(`"uid"`), []byte(`"UID"`)), bytes.ReplaceAll(encode(a), []byte(`"login_user"`), []byte(`"Login_User"`))} {
+		var got Allocation
+		if decodeClosed(b, &got) == nil {
+			t.Fatal("folded allocation key accepted")
+		}
+	}
+	r := Receipt{a, map[string]FilePin{"/registered": {strings.Repeat("c", 64), 0644}}}
+	raw := encode(r)
+	var got Receipt
+	if decodeClosed(raw, &got) != nil {
+		t.Fatal("canonical embedded receipt refused")
+	}
+	if decodeClosed(bytes.ReplaceAll(raw, []byte(`"mode"`), []byte(`"MODE"`)), &got) == nil {
+		t.Fatal("folded nested pin key accepted")
+	}
+}
 func TestReadEnrollmentNoSudoAndIdempotent(t *testing.T) {
 	m, a := fixture(t)
 	p, raw, script := testPacket()
