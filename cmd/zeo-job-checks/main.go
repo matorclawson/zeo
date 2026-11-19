@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -33,17 +34,27 @@ type retirement struct {
 	Reason string `json:"reason"`
 }
 
+type amendment struct {
+	ID             string `json:"id"`
+	Reason         string `json:"reason"`
+	PreviousSHA256 string `json:"previous_sha256"`
+	CurrentSHA256  string `json:"current_sha256"`
+}
+
 type catalog struct {
 	Schema  string       `json:"schema"`
 	Sources []source     `json:"sources"`
 	Checks  []check      `json:"checks"`
 	Retired []retirement `json:"retired"`
+	Amended []amendment  `json:"amended"`
 }
 
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9.-]{1,127}$`)
 var variablePattern = regexp.MustCompile(`^\$\{([A-Z][A-Z0-9_]*)\}$`)
 
 func digest(b []byte) string { s := sha256.Sum256(b); return hex.EncodeToString(s[:]) }
+
+func definition(k check) string { b, _ := json.Marshal(k); return digest(b) }
 
 func decode(b []byte) (catalog, error) {
 	var c catalog
@@ -85,6 +96,29 @@ func compose(previous, current catalog, read func(string) ([]byte, error)) ([]by
 	prior := map[string]bool{}
 	for _, k := range previous.Checks {
 		prior[k.ID] = true
+	}
+	// Keeping an ID is insufficient if its only invocation or assertion changes.
+	oldDefinitions := map[string]string{}
+	for _, k := range previous.Checks {
+		oldDefinitions[k.ID] = definition(k)
+	}
+	newDefinitions := map[string]string{}
+	for _, k := range current.Checks {
+		newDefinitions[k.ID] = definition(k)
+	}
+	amended := map[string]bool{}
+	for _, a := range current.Amended {
+		old, had := oldDefinitions[a.ID]
+		next, has := newDefinitions[a.ID]
+		if !had || !has || old == next || amended[a.ID] || strings.TrimSpace(a.Reason) == "" || a.PreviousSHA256 != old || a.CurrentSHA256 != next {
+			return nil, fmt.Errorf("invalid reviewed amendment: %s", a.ID)
+		}
+		amended[a.ID] = true
+	}
+	for _, k := range current.Checks {
+		if old, had := oldDefinitions[k.ID]; had && old != definition(k) && !amended[k.ID] {
+			return nil, fmt.Errorf("approved check definition changed without reviewed amendment: %s", k.ID)
+		}
 	}
 	retired := map[string]bool{}
 	for _, k := range current.Retired {
@@ -185,7 +219,17 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, "invalid current catalog:", err)
 		return 1
 	}
-	root, err := os.OpenRoot(*dir)
+	absolute, err := filepath.Abs(*dir)
+	if err != nil {
+		fmt.Fprintln(stderr, "input root unresolved")
+		return 1
+	}
+	canonical, err := filepath.EvalSymlinks(absolute)
+	if err != nil {
+		fmt.Fprintln(stderr, "input root unresolved")
+		return 1
+	}
+	root, err := os.OpenRoot(canonical)
 	if err != nil {
 		fmt.Fprintln(stderr, "input root unreadable")
 		return 1
@@ -207,7 +251,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, err)
 		return 1
 	}
-	if _, err := stdout.Write(out); err != nil {
+	// The same canonical root supplies both checked source bytes and execution cwd.
+	// Review still owns invocation semantics and concurrent-mutation assumptions.
+	bound := "cd -- '" + strings.ReplaceAll(canonical, "'", "'\"'\"'") + "' || exit 1\n"
+	if _, err := stdout.Write(append([]byte(bound), out...)); err != nil {
 		return 1
 	}
 	return 0

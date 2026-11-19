@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -114,6 +115,25 @@ func TestRepinnedOwnerFileStillMustContainEachApprovedAnchor(t *testing.T) {
 	}
 }
 
+func TestOrdinaryOwnerHashRepinKeepsUnchangedDefinitionsWithoutAmendment(t *testing.T) {
+	dir, args, c := fixture(t)
+	p := filepath.Join(dir, "owned.txt")
+	b, err := os.ReadFile(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b = append(b, []byte("# owner revision: same obligations\n")...)
+	if err = os.WriteFile(p, b, 0600); err != nil {
+		t.Fatal(err)
+	}
+	c.Sources[0].SHA256 = digest(b)
+	writeCurrent(t, dir, c)
+	var out, errs bytes.Buffer
+	if run(args, &out, &errs) != 0 {
+		t.Fatal("ordinary source hash repin incorrectly required definition amendment", errs.String())
+	}
+}
+
 func TestChangedOwnerBytesAndChangedBaselineAreRefused(t *testing.T) {
 	for _, name := range []string{"owned.txt", "baseline.json"} {
 		dir, args, _ := fixture(t)
@@ -130,7 +150,9 @@ func TestChangedOwnerBytesAndChangedBaselineAreRefused(t *testing.T) {
 func TestGenerateAllChecksOncePerInvocationWithoutExecutingThem(t *testing.T) {
 	dir, args, c := fixture(t)
 	marker := filepath.Join(dir, "must-not-exist")
+	old := c.Checks[0]
 	c.Checks[0].Argv = []string{"touch", marker, "a'b", "$(must-stay-literal)"}
+	c.Amended = []amendment{{ID: old.ID, Reason: "test-only nonexecuting invocation fixture", PreviousSHA256: definition(old), CurrentSHA256: definition(c.Checks[0])}}
 	extra := c.Checks[0]
 	extra.ID = "app.another-refusal"
 	c.Checks = append(c.Checks, extra)
@@ -145,6 +167,87 @@ func TestGenerateAllChecksOncePerInvocationWithoutExecutingThem(t *testing.T) {
 	}
 	if _, err := os.Stat(marker); !os.IsNotExist(err) {
 		t.Fatal("generator executed a check")
+	}
+}
+
+func TestSameIDCannotReplaceConsumerInvocationWithTrue(t *testing.T) {
+	dir, args, c := fixture(t)
+	c.Checks[1].Argv = []string{"true"}
+	writeCurrent(t, dir, c)
+	var out, errs bytes.Buffer
+	if run(args, &out, &errs) != 1 || out.Len() != 0 || !strings.Contains(errs.String(), "definition changed") {
+		t.Fatal("same ID hid dropped harness invocation", errs.String())
+	}
+}
+
+func TestDefinitionAmendmentsBindBothDefinitionsAndRequireReason(t *testing.T) {
+	for _, fault := range []string{"valid", "reason", "old-digest", "new-digest", "unknown-id", "source", "anchor"} {
+		t.Run(fault, func(t *testing.T) {
+			dir, args, c := fixture(t)
+			old := c.Checks[1]
+			c.Checks[1].Argv = []string{"true"}
+			a := amendment{ID: old.ID, Reason: "owner decision fixture-18", PreviousSHA256: definition(old), CurrentSHA256: definition(c.Checks[1])}
+			switch fault {
+			case "reason":
+				a.Reason = " "
+			case "old-digest":
+				a.PreviousSHA256 = strings.Repeat("0", 64)
+			case "new-digest":
+				a.CurrentSHA256 = strings.Repeat("0", 64)
+			case "unknown-id":
+				a.ID = "app.unknown"
+			case "source":
+				c.Checks[1].Source = "other.txt"
+			case "anchor":
+				c.Checks[1].Contains = "source == HEAD"
+			}
+			c.Amended = []amendment{a}
+			writeCurrent(t, dir, c)
+			var out, errs bytes.Buffer
+			code := run(args, &out, &errs)
+			if fault == "valid" {
+				if code != 0 {
+					t.Fatal(errs.String())
+				}
+			} else if code != 1 || out.Len() != 0 {
+				t.Fatal("invalid definition amendment accepted", fault)
+			}
+		})
+	}
+}
+
+func TestGeneratedCommandsUseValidatedRootDespiteDifferentCallerDirectory(t *testing.T) {
+	dir, args, c := fixture(t)
+	// All test execution happens only when the test suite runs on its admitted host.
+	// The command proves relative reads resolve to A, even when launched from B.
+	c.Checks = c.Checks[:1]
+	c.Checks[0].Argv = []string{"/bin/sh", "-c", "cat owned.txt"}
+	b, err := json.Marshal(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = os.WriteFile(filepath.Join(dir, "baseline.json"), b, 0600); err != nil {
+		t.Fatal(err)
+	}
+	args[3] = digest(b)
+	writeCurrent(t, dir, c)
+	var out, errs bytes.Buffer
+	if run(args, &out, &errs) != 0 {
+		t.Fatal(errs.String())
+	}
+	other := t.TempDir()
+	if err = os.WriteFile(filepath.Join(other, "owned.txt"), []byte("WRONG ROOT"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	command := exec.Command("/bin/sh", "-c", out.String())
+	command.Dir = other
+	got, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatal(err, string(got))
+	}
+	want, err := os.ReadFile(filepath.Join(dir, "owned.txt"))
+	if err != nil || !bytes.Equal(got, want) {
+		t.Fatal("generated invocation ran outside validated root", string(got))
 	}
 }
 
