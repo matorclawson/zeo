@@ -86,3 +86,12 @@ files and model NSS/account/policy tools; they never run real useradd, sudo or S
 Other fixtures exercise native Linux sealed snapshots, output/deadline process
 control and locking. They do not establish target account/PAM/SSH compatibility,
 live enrollment, an installed broker or full interrupted-operation recovery.
+
+The Linux source gate at `61c93d04e74371e8ca1714d0344b23c9207f8184`
+passed vet and race-enabled tests in all six packages with Go 1.27.0. Its original
+log SHA256 is `2cf9014f08f0c951ad64d76c4964161dcc92bdefa72472391ed93c54d7071530`.
+Subsequent clean-source cross-compilation produced Linux AMD64 and ARM64
+executables; neither was executed. Native account/PAM/SSHD acceptance remains
+pending. Owned process-group cleanup does not establish containment of
+`setsid` or double-fork descendants, and resource containment is not qualified.
+No production root enrollment is cleared by these source results.
