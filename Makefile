@@ -1,6 +1,6 @@
 GO ?= go
 
-.PHONY: verify format-check vet test
+.PHONY: verify format-check vet test test-bootstrap
 verify: format-check vet test
 
 format-check:
@@ -11,3 +11,6 @@ vet:
 
 test:
 	$(GO) test -race -count=1 ./...
+
+test-bootstrap:
+	$(GO) test -race -count=1 ./cmd/zeo-target-bootstrap
