@@ -1,8 +1,12 @@
 # Job check composition
 
-Candidate developer tool. Baseline280475d passed `make verify` on production-04
-across seven packages. Subsequent council repairs require a fresh exact-head
-Linux gate; no installed distribution is qualified.
+Candidate developer tool. The repaired source at
+`42ac5d163fdb2723a4dd402e93917541a770a48b` passed the Linux `make verify` gate:
+vet and race-enabled tests passed across all seven packages. The complete
+original log SHA256 is
+`f326d2802dd7c3b84496365923aa0d3a5ceb09a91f984d3e9260d047d55a3946`.
+This is source qualification; target enrollment and an installed distribution
+remain unqualified.
 
 `zeo-job-checks --baseline approved.json --baseline-sha256 SHA256 --catalog owned.json --inputs DIR --out /absolute/new-checks.sh`
 publishes a complete shell file only after validating every current source pin and check
