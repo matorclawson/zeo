@@ -1,0 +1,8 @@
+[Unit]
+Description=ZEO App API and web
+Requires=zeoapp-api.service zeoapp-web.service
+BindsTo=zeoapp-api.service zeoapp-web.service zeoapp-memory-guard.service
+After=zeoapp-api.service zeoapp-web.service zeoapp-memory-guard.service
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+[Unit]
+Description=ZEO App low-memory observation guard
+PartOf=zeoapp.target
+
+[Service]
+Type=exec
+User=zeoapp
+Group=zeoapp
+Slice=zeoapp.slice
+# Candidate600MiB floor from the Messenger owner; adoption/measurement pending.
+ExecStartPre=/opt/zeoapp/libexec/zeo-app-memory-guard --check --minimum-mib=600
+ExecStart=/opt/zeoapp/libexec/zeo-app-memory-guard --minimum-mib=600 --interval=200ms
+Restart=no
+MemoryAccounting=yes
+OOMScoreAdjust=1000
+OOMPolicy=kill
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+RestrictSUIDSGID=yes
+UMask=0077

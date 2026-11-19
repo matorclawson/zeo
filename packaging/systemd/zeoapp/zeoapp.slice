@@ -1,0 +1,10 @@
+[Unit]
+Description=ZEO App aggregate resource budget
+
+[Slice]
+MemoryAccounting=yes
+MemoryMax=384M
+# Candidate soft threshold; runtime measurements and owner review are pending.
+MemoryHigh=320M
+MemorySwapMax=0
+TasksMax=128
