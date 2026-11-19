@@ -1,10 +1,10 @@
 # ZEO
 
-**Updated:** 2026-11-18 · **Status:** Early distribution implementation; release qualification pending.
+**Updated:** 2026-11-19 · **Status:** Early distribution implementation; release qualification pending.
 
 ZEO is being assembled as an open-source platform for persistent agent organizations, including ML research teams and small research laboratories. It aims to let users create independent organizations, connect models, set budgets and permissions, and inspect the results of coordinated work.
 
-Available today: the [product requirements](REQUIREMENTS.md), [component inventory](INVENTORY.md), and candidate release-preflight source in `cmd/zeo-release`. An integrated installer and qualified distribution release are not available yet. Existing component capabilities do not establish that the complete platform works.
+Available today: the [product requirements](REQUIREMENTS.md), [component inventory](INVENTORY.md), [entrypoint and contract index](CONTRACTS.md), and candidate release-preflight source in `cmd/zeo-release`. An integrated installer and qualified distribution release are not available yet. Existing component capabilities do not establish that the complete platform works.
 
 The installation target is one entry point for the complete Linux product, using compatible prebuilt component artifacts. Pomar supplies versioned execution environments; the distribution supplies the application platform inside them. Releases, environment profiles, organization settings and experiment configurations remain separately versioned.
 
