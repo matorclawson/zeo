@@ -49,6 +49,11 @@ func (p Paths) policy() []byte {
 	return []byte(loginUser + " ALL=(root) NOPASSWD: " + p.tool() + " run\n")
 }
 func (p Paths) keyLine(packet Packet) []byte {
+	// Defense at the serialization boundary as well as packet parsing. Only the
+	// template may introduce quotes or the final newline.
+	if !validBrokerIP(packet.SourceIP) || strings.ContainsAny(packet.PublicKey, "\r\n\"") || strings.ContainsAny(p.tool(), "\r\n\"") {
+		return nil
+	}
 	return []byte("restrict,from=\"" + packet.SourceIP + "\",command=\"" + p.tool() + " dispatch\" " + packet.PublicKey + "\n")
 }
 func (m Manager) boundHost(p Packet) error {
@@ -104,7 +109,7 @@ func (m Manager) verify(r Receipt, packet Packet, raw, script []byte, revoked bo
 		}
 	}
 	for name, pin := range expected {
-		if name == p.key() && revoked {
+		if (name == p.key() || name == p.Sudoers) && revoked {
 			if exists(name) {
 				return errRefused
 			}
@@ -128,7 +133,7 @@ func (m Manager) receipt() (Receipt, error) {
 
 func (m Manager) apply(packet Packet, raw, script []byte) (result string, err error) {
 	p := m.Paths
-	if m.check() != nil || m.boundHost(packet) != nil {
+	if m.check() != nil || m.boundHost(packet) != nil || len(p.keyLine(packet)) == 0 {
 		return "", errRefused
 	}
 	if exists(p.Journal) {
@@ -276,7 +281,7 @@ func (m Manager) revoke(packet Packet, raw, script []byte) (string, error) {
 		}
 		return "ALREADY_REVOKED_NEW_CONNECTIONS_ONLY", nil
 	}
-	if exists(filepath.Join(p.Journal, "REVOCATION-INTENT.json")) || exists(p.key()+".revoked") || m.verify(r, packet, raw, script, false) != nil {
+	if exists(filepath.Join(p.Journal, "REVOCATION-INTENT.json")) || exists(p.key()+".revoked") || (packet.Privilege == "root" && exists(p.Sudoers+".revoked")) || m.verify(r, packet, raw, script, false) != nil {
 		return "", errRefused
 	}
 	if e = writeRecord(filepath.Join(p.Journal, "REVOCATION-INTENT.json"), map[string]string{"state": "REVOKING_EXACT_OWNED_KEY", "packet_sha256": hash(raw)}); e != nil {
@@ -295,6 +300,23 @@ func (m Manager) revoke(packet Packet, raw, script []byte) (string, error) {
 	}
 	if e = syncDir(filepath.Dir(p.key())); e != nil {
 		return "", e
+	}
+	// Remove the exact owned elevation rule too. The absent authorization already
+	// closes both dispatcher modes, including an already authenticated connection.
+	// Preserve the original policy without overwriting any prior retained object.
+	if packet.Privilege == "root" {
+		if e = os.Link(p.Sudoers, p.Sudoers+".revoked"); e != nil {
+			return "", e
+		}
+		if e = verifyLinkedFile(p.Sudoers, r.Files[p.Sudoers].SHA, 0440, p.Owner); e != nil {
+			return "", errRefused
+		}
+		if e = os.Remove(p.Sudoers); e != nil {
+			return "", e
+		}
+		if e = syncDir(filepath.Dir(p.Sudoers)); e != nil {
+			return "", e
+		}
 	}
 	if e = m.Accounts.Expire(); e != nil {
 		return "", e
