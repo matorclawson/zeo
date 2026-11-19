@@ -13,6 +13,12 @@ ordered invocations. Several checks may share an invocation; it is emitted once
 at the first occurrence, while every stable ID remains in the output. Removing
 or renaming an approved ID fails unless `retired` names that missing ID with a
 nonempty owner decision/reason. A retirement for an unknown or active ID fails.
+Keeping an ID while changing its source, anchor or argv requires a reviewed
+`amended` entry with `id`, `reason`, `previous_sha256` and `current_sha256`.
+These digests bind the old/new check objects encoded by Go JSON in struct field
+order (id, source, contains, argv). Ordinary source-file hash repins do not
+change a check definition. Decisions remain trusted reviewed inputs, not approval
+that the generator can grant itself.
 
 Catalog shape:
 
@@ -26,13 +32,16 @@ Catalog shape:
     "contains": "def test_old_stamp_refused(",
     "argv": ["python3", "-m", "unittest", "scanner"]
   }],
-  "retired": []
+  "retired": [],
+  "amended": []
 }
 ```
 
 Use one ID per required test or assertion, including consumer assertions inside
 a harness, and bind those assertions to the harness invocation. Paths are
-confined to the input root. Exact file hashes preserve the whole owner handoff;
+confined to the input root. The emitted fragment first changes to that same
+canonical input root, so relative commands do not resolve against the caller's
+directory. Exact file hashes preserve the whole owner handoff;
 anchors check that required method/assertion text survives an owner repin.
 The generator does not interpret program semantics: an anchor in a comment or
 an unreachable branch is not behavioral proof. Review and the real gate remain
