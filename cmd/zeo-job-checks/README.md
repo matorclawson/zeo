@@ -1,0 +1,53 @@
+# Job check composition
+
+Candidate developer tool; no executable gate has run yet. This is not an installer.
+
+`zeo-job-checks --baseline approved.json --baseline-sha256 SHA256 --catalog owned.json --inputs DIR`
+emits a shell fragment only after validating every current source pin and check
+anchor and comparing stable check IDs with the pinned last approved catalog.
+Redirect stdout to a job fragment and invoke that fragment from the job. Do not
+copy selected generated commands into a separately maintained command list.
+
+The trusted, reviewed catalog is the single list of required checks and their
+ordered invocations. Several checks may share an invocation; it is emitted once
+at the first occurrence, while every stable ID remains in the output. Removing
+or renaming an approved ID fails unless `retired` names that missing ID with a
+nonempty owner decision/reason. A retirement for an unknown or active ID fails.
+
+Catalog shape:
+
+```json
+{
+  "schema": "zeo.job-checks/v1",
+  "sources": [{"path": "scanner.py", "sha256": "OWNER_FILE_SHA256"}],
+  "checks": [{
+    "id": "app.old-stamp-refusal",
+    "source": "scanner.py",
+    "contains": "def test_old_stamp_refused(",
+    "argv": ["python3", "-m", "unittest", "scanner"]
+  }],
+  "retired": []
+}
+```
+
+Use one ID per required test or assertion, including consumer assertions inside
+a harness, and bind those assertions to the harness invocation. Paths are
+confined to the input root. Exact file hashes preserve the whole owner handoff;
+anchors check that required method/assertion text survives an owner repin.
+The generator does not interpret program semantics: an anchor in a comment or
+an unreachable branch is not behavioral proof. Review and the real gate remain
+required. It also cannot establish that the baseline was actually approved;
+the reviewed baseline hash and catalog provenance belong in JOB-PINS.
+
+Arguments are shell-quoted literals, except an entire argument of the form
+`${UPPERCASE_NAME}`, which expands a required shell variable as one quoted
+argument. Executables must be literal. Commands are not executed by the tool.
+The surrounding admitted runner still owns bounds, source checkout, environment,
+logs and copy-back. Catalogs are trusted job definitions, not a sandbox for
+untrusted commands or a guarantee against concurrent source mutation.
+
+Regression source covers the historical dropped old-stamp and consumer checks,
+renaming, missing/invalid retirement reasons, assertion loss on a legitimate
+file repin, modified owner/baseline bytes, and complete invocation generation.
+Run the repository `make verify` on the admitted Linux runner; do not execute
+candidate code on the Mac mini.
