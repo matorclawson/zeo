@@ -8,17 +8,19 @@ For product requirements see [REQUIREMENTS.md](REQUIREMENTS.md); source and comp
 
 ## Current source interfaces
 
-The implementation files are authoritative. This document points to them rather than maintaining a second executable schema. The helper code was tested at `ddd4666fc895244d87770ab629778856bbb0201e`; later documentation commits do not constitute new gate executions or component installation evidence.
+The implementation files are authoritative. This document points to them rather than maintaining a second executable schema. The exact `280475dbc870b0dc7bf4d4a074d0c553efc4141e` Linux source gate passed vet and race tests across seven packages. Subsequent council repair source requires its own exact-head gate; documentation and source presence do not qualify installation.
 
 | Entrypoint | Authoritative implementation | Input and output | Scope of successful exit |
 |---|---|---|---|
 | `zeo-release` | [CLI](cmd/zeo-release/main.go), [manifest types/validation](internal/release/manifest.go) | `zeo.release/v1` plus explicit Linux target/profile; optional local artifact directory; JSON `zeo.release-plan/v1` to stdout or atomic file | Metadata/local-byte checks completed; output always retains `ready_for_install: false`. |
 | `zeo-service` | [CLI](cmd/zeo-service/main.go), [unit renderer](internal/install/session.go) | Organization/seat, allocated identity names, Pomar digest and explicit resource caps; systemd unit text on stdout | Candidate unit rendered; no account allocation, artifact verification, installation or activation. |
 | `zeo-stage` | [CLI](cmd/zeo-stage/main.go), [artifact staging](internal/install/artifact.go) | Absolute local Pomar payload and existing trusted artifact root, digest and size; relative staged path on stdout | Exact copied bytes published or matching existing bytes verified; no release authentication, executable qualification or service activation. |
+| `zeo-target-bootstrap` | [CLI](cmd/zeo-target-bootstrap/main_linux.go), [enrollment contract](docs/ssh-target-bootstrap.md) | Reviewed public packet and byte pins; plan/apply/revoke with exact retained receipts | Narrow enrollment boundary only; repaired source, native authentication, revocation and containment need exact qualification. |
+| `zeo-job-checks` | [CLI](cmd/zeo-job-checks/main.go), [usage](docs/job-checks.md) | Reviewed baseline digest/current catalog/pinned input root and mandatory fresh absolute `--out` | Complete check script published without replacement; no check execution, job approval or installation. |
 | `make verify` | [Makefile](Makefile) | Maintainer checkout and admitted Linux Go/race toolchain | Formatting prerequisite, vet and race tests; not installed health or product acceptance. |
 | One-entry installation and `make doctor` | Not implemented | Planned complete release/profile and actual installed instance | No success, green diagnostic or installation behavior is available from the present source. |
 
-Each helper supports `--help`. CLI parse/usage errors use exit 2; validation or I/O failures use exit 1; successful helper work/help uses exit 0. Missing or invalid semantic inputs can be validation errors rather than usage errors. An exit code must be interpreted within the narrow helper scope above.
+CLI parse/usage errors generally use exit 2; validation or I/O failures use exit 1; successful helper work uses exit 0. The job-check CLI supports successful `--help`; bootstrap currently treats its flag help request as usage exit2. Missing or invalid semantic inputs can be validation errors rather than usage errors. An exit code must be interpreted within the narrow helper scope above.
 
 The exact source usages are:
 
@@ -26,6 +28,8 @@ The exact source usages are:
 zeo-release --manifest FILE --arch arm64|amd64 --linux-id ID --linux-version VERSION --profile ID --profile-version VERSION [--artifacts DIR] [--out FILE]
 zeo-service --organization ID --seat ID --user USER --group GROUP --pomar-sha256 HEX --memory-bytes N --tasks N --cpu-percent N
 zeo-stage --pomar FILE --sha256 HEX --size BYTES --artifact-root DIR
+zeo-target-bootstrap --packet FILE --packet-sha256 HEX --binary-sha256 HEX [--apply|--revoke]
+zeo-job-checks --baseline FILE --baseline-sha256 HEX --catalog FILE --inputs DIR --out ABSOLUTE_NEW_FILE
 ```
 
 These examples describe the interfaces after tools are built in the maintainer development environment. They do not imply a published tool bundle, qualified component payload or supported end-user installation.

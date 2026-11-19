@@ -1,12 +1,18 @@
 # Job check composition
 
-Candidate developer tool; no executable gate has run yet. This is not an installer.
+Candidate developer tool. Baseline280475d passed `make verify` on production-04
+across seven packages. Subsequent council repairs require a fresh exact-head
+Linux gate; no installed distribution is qualified.
 
-`zeo-job-checks --baseline approved.json --baseline-sha256 SHA256 --catalog owned.json --inputs DIR`
-emits a shell fragment only after validating every current source pin and check
+`zeo-job-checks --baseline approved.json --baseline-sha256 SHA256 --catalog owned.json --inputs DIR --out /absolute/new-checks.sh`
+publishes a complete shell file only after validating every current source pin and check
 anchor and comparing stable check IDs with the pinned last approved catalog.
-Redirect stdout to a job fragment and invoke that fragment from the job. Do not
-copy selected generated commands into a separately maintained command list.
+The CLI requires a fresh absolute output path and emits no executable stdout.
+A same-directory temporary file is fully written and fsynced before no-replace
+publication. Refusal and short writes leave no new runnable fragment. Invoke the
+file only after the composer succeeds (`&&`); never run an old file after an
+error. Do not copy selected commands into a separate list. See
+[usage and limits](../../docs/job-checks.md).
 
 The trusted, reviewed catalog is the single list of required checks and their
 ordered invocations. Several checks may share an invocation; it is emitted once
@@ -46,7 +52,7 @@ anchors check that required method/assertion text survives an owner repin.
 The generator does not interpret program semantics: an anchor in a comment or
 an unreachable branch is not behavioral proof. Review and the real gate remain
 required. It also cannot establish that the baseline was actually approved;
-the reviewed baseline hash and catalog provenance belong in JOB-PINS.
+the reviewed baseline hash and catalog provenance belong in the job input record.
 
 Arguments are shell-quoted literals, except an entire argument of the form
 `${UPPERCASE_NAME}`, which expands a required shell variable as one quoted
@@ -59,4 +65,4 @@ Regression source covers the historical dropped old-stamp and consumer checks,
 renaming, missing/invalid retirement reasons, assertion loss on a legitimate
 file repin, modified owner/baseline bytes, and complete invocation generation.
 Run the repository `make verify` on the admitted Linux runner; do not execute
-candidate code on the Mac mini.
+candidate code outside the admitted Linux runner.
