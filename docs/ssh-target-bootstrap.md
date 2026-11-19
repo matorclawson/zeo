@@ -18,7 +18,7 @@ The closed `zeo.ssh-target-bootstrap/v1` packet has these required fields:
 |---|---|
 | `schema` | Exactly `zeo.ssh-target-bootstrap/v1` |
 | `target_hostname` | Exact short target name |
-| `broker_source_ip` | One actual source IP as seen by the target, without a network range |
+| `broker_source_ip` | One actual source IP as seen by the target, without a network range or IPv6 zone identifier |
 | `broker_source_network` | `tailnet` or `public`; no inferred NAT/interface identity |
 | `login_user` | Exactly `zeoconnect-broker-run`, also returned in the enrollment result |
 | `public_key` | Public Ed25519 key, without key options or comment |
@@ -69,6 +69,12 @@ an EXDEV failure after user allocation. The public key is installed last.
 `--revoke` first verifies the original packet-derived current postimage. It
 retains authorization as `authorized_keys.revoked`, requests that the owned
 account be locked/expired, and retains account, script and receipt evidence.
+For a root-class enrollment it also retains the exact sudo policy under a
+`.revoked` name and removes the active NOPASSWD rule. Both dispatcher modes
+require the exact active public authorization before admitting execution; the
+root helper additionally verifies its exact policy. The private journal is not
+made readable to the restricted account. An interrupted revoke after key removal
+therefore blocks new execution even if account expiry or policy cleanup fails.
 Changed objects refuse instead of overwriting another owner's work. Its result
 explicitly does **not** claim that already authenticated sessions are drained.
 Broker stop/drain and uncertainty reconciliation remain separate obligations.
@@ -95,3 +101,10 @@ executables; neither was executed. Native account/PAM/SSHD acceptance remains
 pending. Owned process-group cleanup does not establish containment of
 `setsid` or double-fork descendants, and resource containment is not qualified.
 No production root enrollment is cleared by these source results.
+
+The latest council repair source rejects IPv6 zones before key-line construction,
+removes owned elevation during revocation, and checks active authorization in the
+local dispatcher. These repairs have authored regression fixtures but have not
+been compiled or tested. The earlier source PASS does not cover them. Existing
+JSON intent/completion journals also need migration to the operator's SQLite-only
+service-state policy before a compliant distribution can be offered.
