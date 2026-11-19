@@ -9,7 +9,9 @@ import (
 	"errors"
 	"io"
 	"net/netip"
+	"reflect"
 	"regexp"
+	"strings"
 )
 
 const loginUser = "zeoconnect-broker-run"
@@ -84,12 +86,74 @@ func decodeClosed(raw []byte, out any) error {
 	if _, err := d.Token(); err != io.EOF {
 		return errRefused
 	}
+	// encoding/json matches struct fields case-insensitively even with
+	// DisallowUnknownFields. Check exact schema tags BEFORE typed decoding,
+	// including embedded allocation fields and nested receipt file pins.
+	var value any
+	if json.Unmarshal(raw, &value) != nil || !canonicalShape(value, reflect.TypeOf(out).Elem()) {
+		return errRefused
+	}
 	d = json.NewDecoder(bytes.NewReader(raw))
 	d.DisallowUnknownFields()
 	if err := d.Decode(out); err != nil {
 		return errRefused
 	}
 	return nil
+}
+
+func schemaFields(t reflect.Type, fields map[string]reflect.Type) {
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		if f.PkgPath != "" {
+			continue
+		}
+		tag := strings.Split(f.Tag.Get("json"), ",")[0]
+		if tag == "-" {
+			continue
+		}
+		if f.Anonymous && tag == "" && f.Type.Kind() == reflect.Struct {
+			schemaFields(f.Type, fields)
+			continue
+		}
+		if tag == "" {
+			tag = f.Name
+		}
+		fields[tag] = f.Type
+	}
+}
+func canonicalShape(value any, t reflect.Type) bool {
+	switch t.Kind() {
+	case reflect.Struct:
+		object, ok := value.(map[string]any)
+		if !ok {
+			return false
+		}
+		fields := map[string]reflect.Type{}
+		schemaFields(t, fields)
+		if len(object) != len(fields) {
+			return false
+		}
+		for name, v := range object {
+			field, ok := fields[name]
+			if !ok || !canonicalShape(v, field) {
+				return false
+			}
+		}
+		return true
+	case reflect.Map:
+		object, ok := value.(map[string]any)
+		if !ok || t.Key().Kind() != reflect.String {
+			return false
+		}
+		for _, v := range object {
+			if !canonicalShape(v, t.Elem()) {
+				return false
+			}
+		}
+		return true
+	default:
+		return true // The subsequent typed decoder checks scalar types.
+	}
 }
 
 func parsePacket(raw []byte, pin string) (Packet, []byte, error) {
