@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -264,5 +265,98 @@ func TestDuplicateIDsAndUnknownCatalogFieldsRefuse(t *testing.T) {
 	b = append([]byte(`{"ignored":true,`), b[1:]...)
 	if _, err := decode(b); err == nil {
 		t.Fatal("unknown catalog field accepted")
+	}
+}
+
+func TestCatalogRejectsDuplicateAndCaseFoldedKeysAtEveryLevel(t *testing.T) {
+	_, _, c := fixture(t)
+	raw, err := json.Marshal(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, bad := range [][]byte{
+		append([]byte(`{"schema":"zeo.job-checks/v1",`), raw[1:]...),
+		bytes.Replace(raw, []byte(`"schema"`), []byte(`"SCHEMA"`), 1),
+		bytes.Replace(raw, []byte(`"checks":`), []byte(`"CHECKS":[],"checks":`), 1),
+		bytes.Replace(raw, []byte(`"id":"app.old-stamp-refusal"`), []byte(`"id":"app.old-stamp-refusal","id":"app.changed"`), 1),
+		bytes.Replace(raw, []byte(`"argv":`), []byte(`"ARGV":["true"],"argv":`), 1),
+		bytes.Replace(raw, []byte(`"path":`), []byte(`"PATH":`), 1),
+		bytes.Replace(raw, []byte(`"retired":null`), []byte(`"retired":[{"id":"app.old-stamp-refusal","reason":"a","REASON":"b"}]`), 1),
+		bytes.Replace(raw, []byte(`"amended":null`), []byte(`"amended":[{"id":"app.old-stamp-refusal","reason":"a","previous_sha256":"x","PREVIOUS_SHA256":"y","current_sha256":"z"}]`), 1),
+	} {
+		if bytes.Equal(bad, raw) {
+			t.Fatal("fixture failed to mutate catalog")
+		}
+		if _, err := decode(bad); err == nil {
+			t.Fatal("ambiguous catalog accepted", string(bad))
+		}
+	}
+	if _, err := decode(raw); err != nil {
+		t.Fatal("canonical catalog refused", err)
+	}
+}
+
+func TestRefusedCompositionPublishesNoRunnableFragment(t *testing.T) {
+	dir, args, c := fixture(t)
+	c.Checks = c.Checks[1:]
+	writeCurrent(t, dir, c)
+	target := filepath.Join(dir, "checks.sh")
+	args = append(args, "--out", target)
+	var out, errs bytes.Buffer
+	if emit(args, &out, &errs) == 0 {
+		t.Fatal("refused composition returned success")
+	}
+	if out.Len() != 0 {
+		t.Fatal("executable prefix emitted to stdout")
+	}
+	if _, err := os.Lstat(target); !os.IsNotExist(err) {
+		t.Fatal("refused composition published a runnable fragment", err)
+	}
+	command := exec.Command("/bin/sh", target)
+	if err := command.Run(); err == nil {
+		t.Fatal("refused fragment could be executed successfully")
+	}
+}
+
+func TestShortFragmentWriteNeverPublishesPrefix(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "checks.sh")
+	err := publishFragment(target, []byte("true\necho complete\n"), func(f *os.File, b []byte) (int, error) {
+		n, err := f.Write(b[:5])
+		if err != nil {
+			return n, err
+		}
+		return n, io.ErrShortWrite
+	})
+	if err == nil {
+		t.Fatal("short write accepted")
+	}
+	if _, err := os.Lstat(target); !os.IsNotExist(err) {
+		t.Fatal("short write published executable prefix", err)
+	}
+	entries, err := os.ReadDir(dir)
+	if err != nil || len(entries) != 0 {
+		t.Fatal("temporary prefix not removed", err)
+	}
+}
+
+func TestCLIAtomicallyPublishesCompleteFragmentWithoutReplacement(t *testing.T) {
+	dir, args, _ := fixture(t)
+	target := filepath.Join(dir, "checks.sh")
+	args = append(args, "--out", target)
+	var out, errs bytes.Buffer
+	if emit(args, &out, &errs) != 0 || out.Len() != 0 {
+		t.Fatal("complete fragment not published", errs.String())
+	}
+	before, err := os.ReadFile(target)
+	if err != nil || !bytes.Contains(before, []byte("consumer-source-binding")) {
+		t.Fatal("incomplete output", err)
+	}
+	if emit(args, &out, &errs) == 0 {
+		t.Fatal("existing fragment replaced")
+	}
+	after, err := os.ReadFile(target)
+	if err != nil || !bytes.Equal(before, after) {
+		t.Fatal("existing fragment changed", err)
 	}
 }

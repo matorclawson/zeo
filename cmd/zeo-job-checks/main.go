@@ -13,6 +13,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -56,8 +57,82 @@ func digest(b []byte) string { s := sha256.Sum256(b); return hex.EncodeToString(
 
 func definition(k check) string { b, _ := json.Marshal(k); return digest(b) }
 
+// Validate keys before encoding/json can discard duplicates or match struct
+// tags case-insensitively. Walk every nested catalog object, not only its root.
+func canonicalCatalog(raw []byte) error {
+	d := json.NewDecoder(bytes.NewReader(raw))
+	if err := catalogValue(d, reflect.TypeOf(catalog{})); err != nil {
+		return err
+	}
+	if _, err := d.Token(); err != io.EOF {
+		return errors.New("catalog has trailing data")
+	}
+	return nil
+}
+func catalogValue(d *json.Decoder, typ reflect.Type) error {
+	token, err := d.Token()
+	if err != nil {
+		return err
+	}
+	switch typ.Kind() {
+	case reflect.Struct:
+		if token != json.Delim('{') {
+			return errors.New("catalog object required")
+		}
+		fields := map[string]reflect.Type{}
+		for i := 0; i < typ.NumField(); i++ {
+			field := typ.Field(i)
+			fields[strings.Split(field.Tag.Get("json"), ",")[0]] = field.Type
+		}
+		seen := map[string]bool{}
+		for d.More() {
+			keyToken, err := d.Token()
+			if err != nil {
+				return err
+			}
+			key, ok := keyToken.(string)
+			field, exists := fields[key]
+			if !ok || !exists || seen[key] {
+				return errors.New("duplicate or noncanonical catalog key")
+			}
+			seen[key] = true
+			if err := catalogValue(d, field); err != nil {
+				return err
+			}
+		}
+		close, err := d.Token()
+		if err != nil || close != json.Delim('}') {
+			return errors.New("catalog object incomplete")
+		}
+	case reflect.Slice:
+		if token == nil {
+			return nil
+		} // Optional arrays marshal as null.
+		if token != json.Delim('[') {
+			return errors.New("catalog array required")
+		}
+		for d.More() {
+			if err := catalogValue(d, typ.Elem()); err != nil {
+				return err
+			}
+		}
+		close, err := d.Token()
+		if err != nil || close != json.Delim(']') {
+			return errors.New("catalog array incomplete")
+		}
+	default:
+		if _, nested := token.(json.Delim); nested {
+			return errors.New("catalog scalar required")
+		}
+	}
+	return nil // Typed decoding and semantic validation follow this key check.
+}
+
 func decode(b []byte) (catalog, error) {
 	var c catalog
+	if err := canonicalCatalog(b); err != nil {
+		return c, err
+	}
 	d := json.NewDecoder(bytes.NewReader(b))
 	d.DisallowUnknownFields()
 	if err := d.Decode(&c); err != nil {
@@ -260,4 +335,76 @@ func run(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func main() { os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }
+// Publish only a complete composition, on the destination filesystem. Never
+// replace an old fragment: the caller chooses a fresh output and gates on exit.
+func publishFragment(path string, raw []byte, write func(*os.File, []byte) (int, error)) error {
+	if !filepath.IsAbs(path) {
+		return errors.New("output path must be absolute")
+	}
+	f, err := os.CreateTemp(filepath.Dir(path), ".zeo-job-checks-*")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(f.Name())
+	defer f.Close()
+	n, err := write(f, raw)
+	if err != nil {
+		return err
+	}
+	if n != len(raw) {
+		return io.ErrShortWrite
+	}
+	if err = f.Sync(); err != nil {
+		return err
+	}
+	if err = f.Close(); err != nil {
+		return err
+	}
+	// link is no-replace; the temporary file is complete before publication.
+	if err = os.Link(f.Name(), path); err != nil {
+		return err
+	}
+	return nil
+}
+
+func emit(args []string, stdout, stderr io.Writer) int {
+	var output string
+	filtered := make([]string, 0, len(args))
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--help" || arg == "-help" || arg == "-h" {
+			fmt.Fprintln(stdout, "zeo-job-checks --baseline FILE --baseline-sha256 HEX --catalog FILE --inputs DIR --out ABSOLUTE_NEW_FILE")
+			return 0
+		}
+		if arg == "--out" || arg == "-out" {
+			if output != "" || i+1 == len(args) {
+				fmt.Fprintln(stderr, "one output path is required")
+				return 2
+			}
+			i++
+			output = args[i]
+		} else if strings.HasPrefix(arg, "--out=") || strings.HasPrefix(arg, "-out=") {
+			if output != "" {
+				fmt.Fprintln(stderr, "one output path is required")
+				return 2
+			}
+			output = strings.SplitN(arg, "=", 2)[1]
+		} else {
+			filtered = append(filtered, arg)
+		}
+	}
+	if output == "" || !filepath.IsAbs(output) {
+		fmt.Fprintln(stderr, "--out ABSOLUTE_NEW_FILE required; stdout is not an executable fragment")
+		return 2
+	}
+	var fragment bytes.Buffer
+	if code := run(filtered, &fragment, stderr); code != 0 {
+		return code
+	}
+	if err := publishFragment(output, fragment.Bytes(), func(f *os.File, b []byte) (int, error) { return f.Write(b) }); err != nil {
+		fmt.Fprintln(stderr, "fragment publication failed; no retry or execution without reconciliation")
+		return 1
+	}
+	return 0
+}
+func main() { os.Exit(emit(os.Args[1:], os.Stdout, os.Stderr)) }
