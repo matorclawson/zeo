@@ -43,6 +43,13 @@ The generated script is not a signature or release-trust record.
 
 `make verify` includes race-enabled regression tests for lost scanner/consumer
 checks, same-ID invocation changes, retirements/amendments, wrong source pins,
-root binding and shell quoting. New ambiguity/refusal/short-write publication regressions are
-written but require a fresh Linux gate after review. Earlier seven-package
-qualification at280475d does not cover those repairs.
+root binding and shell quoting, plus ambiguity/refusal/short-write publication
+regressions. Those repair source and test bytes were exercised by the Linux gate
+at `42ac5d163fdb2723a4dd402e93917541a770a48b`: Go 1.27.0 vet and race tests passed
+across seven packages. Original full log SHA256:
+`f326d2802dd7c3b84496365923aa0d3a5ceb09a91f984d3e9260d047d55a3946`.
+
+This is source-test evidence for that exact commit, not native job admission,
+installation or a whole-current-head approval. Later documentation-only changes
+preserve executable/test bytes but still require their own review disposition;
+no exact-head gate or approval is silently transferred.

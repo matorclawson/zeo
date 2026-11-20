@@ -1,9 +1,10 @@
 # SSH target enrollment candidate
 
 `cmd/zeo-target-bootstrap` implements the initial Linux target enrollment boundary
-for an existing Connect broker. **It is unqualified candidate Go code.** It has
-not run on a target and is not a whole-platform installer or a working broker.
-Compilation and tests belong on an admitted Linux gate.
+for an existing Connect broker. **It is candidate Go code with recorded Linux
+source-test coverage; target qualification remains pending.** It has not run on
+a target and is not a whole-platform installer or a working broker. Compilation
+and tests belong on an admitted Linux gate.
 
 The initial administrator invokes an independently qualified, pinned executable
 once with a reviewed PUBLIC enrollment packet. Packet and binary SHA256 checks
@@ -102,9 +103,16 @@ pending. Owned process-group cleanup does not establish containment of
 `setsid` or double-fork descendants, and resource containment is not qualified.
 No production root enrollment is cleared by these source results.
 
-The latest council repair source rejects IPv6 zones before key-line construction,
+The subsequent repair source rejects IPv6 zones before key-line construction,
 removes owned elevation during revocation, and checks active authorization in the
-local dispatcher. These repairs have authored regression fixtures but have not
-been compiled or tested. The earlier source PASS does not cover them. Existing
-JSON intent/completion journals also need migration to the operator's SQLite-only
-service-state policy before a compliant distribution can be offered.
+local dispatcher. These repairs and regression fixtures passed the Linux source
+gate at `42ac5d163fdb2723a4dd402e93917541a770a48b`: Go 1.27.0 vet and race tests
+across seven packages. Original full log SHA256:
+`f326d2802dd7c3b84496365923aa0d3a5ceb09a91f984d3e9260d047d55a3946`.
+
+That result covers the repair source, not native account/SSH acceptance,
+installed revocation or full containment. Later documentation-only successors
+change no executable or test bytes and do not automatically acquire a new gate
+or whole-head approval. Existing JSON intent/completion journals still need
+migration to the required SQLite-only service-state policy before a compliant
+distribution can be offered.

@@ -1,6 +1,6 @@
 # Entrypoints and integration contracts
 
-**Updated:** 2026-11-19 · **Status:** Maintainer source interface index; installed distribution and end-user entrypoint not qualified.
+**Updated:** 2026-11-20 · **Status:** Maintainer source interface index; installed distribution and end-user entrypoint not qualified.
 
 This repository assembles the product. Its current executables are assembly helpers. The Runtime-owned action dispatcher and maintained application/property recipes are separate capabilities; this index does not replace their catalog, create a new runner or establish their installed coverage. A component name or version pin does not authorize its use.
 
@@ -8,14 +8,14 @@ For product requirements see [REQUIREMENTS.md](REQUIREMENTS.md); source and comp
 
 ## Current source interfaces
 
-The implementation files are authoritative. This document points to them rather than maintaining a second executable schema. The exact `280475dbc870b0dc7bf4d4a074d0c553efc4141e` Linux source gate passed vet and race tests across seven packages. Subsequent council repair source requires its own exact-head gate; documentation and source presence do not qualify installation.
+The implementation files are authoritative. This document points to them rather than maintaining a second executable schema. The repair source at `42ac5d163fdb2723a4dd402e93917541a770a48b` passed Go 1.27.0 vet and race tests across seven packages. The original full gate-log SHA256 is `f326d2802dd7c3b84496365923aa0d3a5ceb09a91f984d3e9260d047d55a3946`. This includes the input, authorization, revocation and output-publication repairs; it supersedes the older source-only evidence, not native acceptance. Documentation-only successors preserve those executable/test bytes but need an explicit current-head review and gate-carry disposition. Documentation and source presence do not qualify installation.
 
 | Entrypoint | Authoritative implementation | Input and output | Scope of successful exit |
 |---|---|---|---|
 | `zeo-release` | [CLI](cmd/zeo-release/main.go), [manifest types/validation](internal/release/manifest.go) | `zeo.release/v1` plus explicit Linux target/profile; optional local artifact directory; JSON `zeo.release-plan/v1` to stdout or atomic file | Metadata/local-byte checks completed; output always retains `ready_for_install: false`. |
 | `zeo-service` | [CLI](cmd/zeo-service/main.go), [unit renderer](internal/install/session.go) | Organization/seat, allocated identity names, Pomar digest and explicit resource caps; systemd unit text on stdout | Candidate unit rendered; no account allocation, artifact verification, installation or activation. |
 | `zeo-stage` | [CLI](cmd/zeo-stage/main.go), [artifact staging](internal/install/artifact.go) | Absolute local Pomar payload and existing trusted artifact root, digest and size; relative staged path on stdout | Exact copied bytes published or matching existing bytes verified; no release authentication, executable qualification or service activation. |
-| `zeo-target-bootstrap` | [CLI](cmd/zeo-target-bootstrap/main_linux.go), [enrollment contract](docs/ssh-target-bootstrap.md) | Reviewed public packet and byte pins; plan/apply/revoke with exact retained receipts | Narrow enrollment boundary only; repaired source, native authentication, revocation and containment need exact qualification. |
+| `zeo-target-bootstrap` | [CLI](cmd/zeo-target-bootstrap/main_linux.go), [enrollment contract](docs/ssh-target-bootstrap.md) | Reviewed public packet and byte pins; plan/apply/revoke with exact retained receipts | Narrow enrollment boundary only; repaired source tests passed at the exact commit above, while native authentication, installed revocation and containment remain unqualified. |
 | `zeo-job-checks` | [CLI](cmd/zeo-job-checks/main.go), [usage](docs/job-checks.md) | Reviewed baseline digest/current catalog/pinned input root and mandatory fresh absolute `--out` | Complete check script published without replacement; no check execution, job approval or installation. |
 | `make verify` | [Makefile](Makefile) | Maintainer checkout and admitted Linux Go/race toolchain | Formatting prerequisite, vet and race tests; not installed health or product acceptance. |
 | One-entry installation and `make doctor` | Not implemented | Planned complete release/profile and actual installed instance | No success, green diagnostic or installation behavior is available from the present source. |
